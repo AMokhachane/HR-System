@@ -22,7 +22,7 @@ namespace api.Dtos.Employee
         public int Salary { get; set; }
         public string ContractType { get; set; } = string.Empty;
         public DateTime StartDate { get; set; } = DateTime.Now;
-        public DateTime EndDate { get; set; }
+        // public DateTime EndDate { get; set; }
         
     }
 }
