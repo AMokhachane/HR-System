@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos.Employee;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +38,16 @@ namespace api.Controllers
             }
 
             return Ok(employee.ToEmployeeDto());
+        }
+
+        //This is the post form for a new employee
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateEmployeeRequestDto employeeDto)
+        {
+            var employeeModel = employeeDto.ToEmployeeFromCreateDTO();
+            _context.Employees.Add(employeeModel);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = employeeModel.EmployeeId }, employeeModel.ToEmployeeDto());
         }
     }
 }

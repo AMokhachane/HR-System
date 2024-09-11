@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace api.Dtos.Employee
 {
-    public class EmployeeDto
+    public class CreateEmployeeRequestDto
     {
-        public int EmployeeId { get; set; }
         public string FullName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
@@ -23,6 +22,5 @@ namespace api.Dtos.Employee
         public string ContractType { get; set; } = string.Empty;
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime EndDate { get; set; }
-        
     }
 }

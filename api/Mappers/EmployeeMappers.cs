@@ -32,5 +32,26 @@ namespace api.Mappers
                 
             };
         }
+        public static Employee ToEmployeeFromCreateDTO(this CreateEmployeeRequestDto employeeDto)
+        {
+            return new Employee
+            {
+                FullName = employeeDto.FullName,
+                Email = employeeDto.Email,
+                Password = employeeDto.Password,
+                IdentityNumber = employeeDto.IdentityNumber,
+                DateOfBirth = employeeDto.DateOfBirth,
+                Gender = employeeDto.Gender,
+                ImageId = employeeDto.ImageId,
+                TaxNumber = employeeDto.TaxNumber,
+                MaritalStatus = employeeDto.MaritalStatus,
+                PhysicalAddress = employeeDto.PhysicalAddress,
+                PostalAddress = employeeDto.PostalAddress,
+                Salary = employeeDto.Salary,
+                ContractType = employeeDto.ContractType,
+                StartDate = employeeDto.StartDate,
+                EndDate = employeeDto.EndDate
+            };
+        }
     }
 }

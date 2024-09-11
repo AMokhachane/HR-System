@@ -11,11 +11,11 @@ namespace api.Models
         public string FullName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public int IdentityNumber { get; set; }
+        public string IdentityNumber { get; set; } = string.Empty; // Changed to string cause int doesn't take zero leads
         public int DateOfBirth { get; set; }
         public string Gender { get; set; } = string.Empty;
         public int ImageId { get; set; }
-        public int TaxNumber { get; set; }
+        public string TaxNumber { get; set; } = string.Empty; //Changed to string cause int doesn't take zero leads
         public string MaritalStatus { get; set; } = string.Empty;
         public string PhysicalAddress { get; set; } = string.Empty;
         public string PostalAddress { get; set; } = string.Empty;
