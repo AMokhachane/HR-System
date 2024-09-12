@@ -1,0 +1,67 @@
+.parentContainer {
+    display: flex;
+}
+
+.box {
+    margin-left: 250px; /* Adjust this value as needed to ensure the content is not hidden */
+    padding: 20px;
+    width: calc(100% - 250px); /* Ensure the width accounts for the sidebar */
+    box-sizing: border-box;
+}
+
+.heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.inputField {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.errorMessage {
+    color: red;
+    margin-top: 5px;
+}
+
+.successMessage {
+    color: green;
+    margin-bottom: 10px;
+}
+
+.dropzone {
+    border: 2px dashed #ddd;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.dropzoneIcon {
+    font-size: 24px;
+}
+
+.dropzoneText {
+    display: block;
+    margin-top: 10px;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.rightAlign {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.uploadButton {
+    padding: 10px 20px;
+    font-size: 16px;
+}
