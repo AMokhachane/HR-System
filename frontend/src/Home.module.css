@@ -1,62 +1,32 @@
-.container {
+.header {
+  padding: 30px;
+  border-bottom: 1px solid #ddd;
+  }
+   
+.employee-directory {
 	display: flex;
-	flex-direction: row;
+	flex-wrap: wrap; /* Allows cards to wrap to the next line if there's not enough space */
+	gap: 30px; /* Adds spacing between cards */
+  }
+   
+  .employee-card {
+	border: 1px solid #ddd;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	width: 100%; /* This can be adjusted based on the desired width */
+	max-width: 250px; /* Adjust the maximum width of each card */
+  }
+   
+  .employee-card:hover {
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
   }
   
-  .sidebar {
-	width: 250px;
-	background-color: #f5f5f5;
-	height: 100vh;
-	padding: 20px;
-  }
-  
-  .nav-list li {
-	margin: 15px 0;
-	cursor: pointer;
-  }
-  
-  .main-content {
-	flex-grow: 1;
-	padding: 20px;
-  }
-  
-  .profile-card {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	padding: 20px;
-	background-color: #fff;
-	border-radius: 10px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-	margin-bottom: 20px;
-  }
-  
-  .profile-pic {
-	width: 100px;
-	height: 100px;
-	border-radius: 50%;
-	margin-bottom: 15px;
-  }
-  
-  .tabs {
-	display: flex;
-	list-style: none;
-	padding: 0;
-  }
-  
-  .tabs li {
-	margin-right: 20px;
-	padding: 10px;
-	cursor: pointer;
-	background-color: #f0f0f0;
-	border-radius: 5px;
-  }
-  
-  .tabs li.active {
-	background-color: #007bff;
-	color: white;
-  }
-  
-  .tab-content {
-	margin-top: 20px;
+  .container{
+	margin-left: 260px;
+ } 
+
+ .employee-card img {
+	width: 250px; /* Makes the image responsive to the card's width */
+	height: auto; /* Maintains the aspect ratio */
+	border-bottom: 1px solid #ddd; /* Optional: adds a border below the image */
   }

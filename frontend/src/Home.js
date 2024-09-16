@@ -1,78 +1,54 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import HomeCSS from "./Home.module.css";
-import Sidebar from "./Sidebar";
+import React from 'react';
+import { Container, Row, Col, Card, InputGroup, FormControl } from 'react-bootstrap';
+import { FaSearch, FaUserCircle } from 'react-icons/fa';
+import HomeCSS from './Home.module.css'; // Use the CSS module
+import Sidebar from './Sidebar'
 
-export const Home = () => {
-  const [activeTab, setActiveTab] = useState("Employees");
-  const [images, setImages] = useState([]);
+const employees = [
+  { id: 1, fullName: 'Jessica Jones', JobTitle: 'Senior HR Manager', email: 'jessica@xyz.com', phone: '7463', image: 'https://via.placeholder.com/150' },
+  { id: 2, fullName: 'Leeds Garber', JobTitle: 'HR Manager', email: 'leeds@xyz.com', phone: '5678', image: 'https://via.placeholder.com/150' },
+  { id: 3, fullName: 'CRM Jessica', JobTitle: 'HR', email: 'crm@xyz.com', phone: '9876', image: 'https://via.placeholder.com/150' },
+  {id: 4, fullName: 'Amanda Mokhachane', JobTitle: 'HR', email: 'crm@xyz.com', phone: '9876', image: 'https://via.placeholder.com/150' },
+{id: 5, fullName: 'Sandile Mabaso', JobTitle: 'HR', email: 'crm@xyz.com', phone: '9876', image: 'https://via.placeholder.com/150' },
+{id: 6, fullName: 'Nhlayiseko Vhuma', JobTitle: 'HR', email: 'crm@xyz.com', phone: '9876', image: 'https://via.placeholder.com/150' },
+];
 
-  // Fetch images from API
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await axios.get("http://localhost:5239/api/employee");
-        setImages(response.data);
-      } catch (error) {
-        console.error("An error occurred while fetching employee", error);
-      }
-    };
-
-    fetchImages();
-  }, []);
-
+const Home = () => {
   return (
-    <div className={HomeCSS["container"]}>
-      <Sidebar />
-      
-      Main Content
-      <div className={HomeCSS["main-content"]}>
-        {/* User Profile Section */}
-        <div className={HomeCSS["profile-card"]}>
-          <img src="user-photo-url" alt="Profile" className={HomeCSS["profile-pic"]} />
-          <h2>Kim Da-hyun</h2>
-          <p>UX Designer</p>
-          <p>AKV0305 - Singapore</p>
-          <p>Email: kim.d@gmail.com</p>
-        </div>
-
-        {/* Tabs Section */}
-        <div className={HomeCSS["tabs-section"]}>
-          <ul className={HomeCSS["tabs"]}>
-            <li
-              className={activeTab === "Employees" ? HomeCSS["active"] : ""}
-              onClick={() => setActiveTab("Employees")}
-            >
-              Employees
-            </li>
-            <li
-              className={activeTab === "Onboarding" ? HomeCSS["active"] : ""}
-              onClick={() => setActiveTab("Onboarding")}
-            >
-              Onboarding
-            </li>
-          </ul>
-
-          {/* Tab content */}
-          <div className={HomeCSS["tab-content"]}>
-            {activeTab === "Employees" && (
-              <div>
-                {/* Employee details */}
-                <h3>Employment Details</h3>
-                {/* Insert employee details component or HTML here */}
-
-                {/* Image Grid */}
-                <div className={HomeCSS["image-grid"]}>
-                  {images.map((image) => (
-                    <div key={image.imageId} className={HomeCSS["image-item"]}>
-                      <img src={image.url} alt={image.title} />
-                      <h4>{image.title}</h4>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+    <div className={HomeCSS.container}>
+      <div className={HomeCSS.sidebar}>
+        <Sidebar/>
+      </div>
+      <div className={HomeCSS['main-content']}>
+        <Row className={HomeCSS.header}>
+          <Col>
+            <InputGroup>
+              <FormControl
+                placeholder="Search Employee"
+                aria-label="Search Employee"
+                aria-describedby="search-icon"
+              />
+              <InputGroup.Text id="search-icon">
+                <FaSearch />
+              </InputGroup.Text>
+            </InputGroup>
+          </Col>
+          <Col className="text-end">
+            <FaUserCircle size={20} />
+          </Col>
+        </Row>
+        <div className={HomeCSS['employee-directory']}>
+          {employees.map((employee) => (
+            <Card className={HomeCSS['employee-card']} key={employee.id}>
+            <Card.Img variant="top" src={employee.image} alt={`${employee.fullName}'s profile`} />
+            <Card.Body>
+              <Card.Title>{employee.fullName}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">{employee.JobTitle}</Card.Subtitle>
+              <Card.Text>Email: {employee.email}</Card.Text>
+              <Card.Text>Phone: {employee.phone}</Card.Text>
+            </Card.Body>
+          </Card>
+          ))}
         </div>
       </div>
     </div>
