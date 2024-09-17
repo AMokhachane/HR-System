@@ -8,14 +8,14 @@ namespace api.Dtos.Employee
     public class EmployeeDto
     {
         public int EmployeeId { get; set; }
-        public string FullName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+         public string Surname { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
         public string IdentityNumber { get; set; } = string.Empty;
         public string PassportNumber { get; set; } = string.Empty;
-        public DateOnly DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; } = string.Empty;
-        public int ImageId { get; set; }
+        public string Url { get; set; } = string.Empty;
         public string TaxNumber { get; set; } = string.Empty;
         public string MaritalStatus { get; set; } = string.Empty;
         public string PhysicalAddress { get; set; } = string.Empty;

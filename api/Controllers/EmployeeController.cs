@@ -6,6 +6,7 @@ using api.Data;
 using api.Dtos.Employee;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using api.Models;
 
 namespace api.Controllers
 {
@@ -42,12 +43,13 @@ namespace api.Controllers
 
         //This is the post form for a new employee
         [HttpPost]
-        public IActionResult Create([FromBody] CreateEmployeeRequestDto employeeDto)
-        {
-            var employeeModel = employeeDto.ToEmployeeFromCreateDTO();
-            _context.Employees.Add(employeeModel);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(GetById), new { id = employeeModel.EmployeeId }, employeeModel.ToEmployeeDto());
-        }
+public IActionResult Create([FromBody] Employee employee)
+{
+    // Assuming you no longer need a DTO conversion here
+    _context.Employees.Add(employee);
+    _context.SaveChanges();
+    
+    return CreatedAtAction(nameof(GetById), new { id = employee.EmployeeId }, employee);
+}
     }
 }

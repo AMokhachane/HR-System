@@ -14,13 +14,13 @@ namespace api.Mappers
             return new EmployeeDto
             {
                 EmployeeId = employeeModel.EmployeeId,
-                FullName = employeeModel.FullName,
+                Name = employeeModel.Name,
+                Surname = employeeModel.Surname,
                 Email = employeeModel.Email,
-                Password = employeeModel.Password,
                 IdentityNumber = employeeModel.IdentityNumber,
                 DateOfBirth = employeeModel.DateOfBirth,
                 Gender = employeeModel.Gender,
-                ImageId = employeeModel.ImageId,
+                Url = employeeModel.Url,
                 TaxNumber = employeeModel.TaxNumber,
                 MaritalStatus = employeeModel.MaritalStatus,
                 PhysicalAddress = employeeModel.PhysicalAddress,
@@ -36,13 +36,13 @@ namespace api.Mappers
         {
             return new Employee
             {
-                FullName = employeeDto.FullName,
+                Name = employeeDto.Name,
+                Surname = employeeDto.Surname,
                 Email = employeeDto.Email,
-                Password = employeeDto.Password,
                 IdentityNumber = employeeDto.IdentityNumber,
                 DateOfBirth = employeeDto.DateOfBirth,
                 Gender = employeeDto.Gender,
-                ImageId = employeeDto.ImageId,
+                Url = employeeDto.Url,
                 TaxNumber = employeeDto.TaxNumber,
                 MaritalStatus = employeeDto.MaritalStatus,
                 PhysicalAddress = employeeDto.PhysicalAddress,
