@@ -16,27 +16,31 @@ const employees = [
 const Home = () => {
   return (
     <div className={HomeCSS.container}>
+      <div className={HomeCSS.leftSide}>
       <div className={HomeCSS.sidebar}>
         <Sidebar/>
       </div>
+      </div>
+      <div className={HomeCSS.rightSide}>
       <div className={HomeCSS['main-content']}>
-        <Row className={HomeCSS.header}>
-          <Col>
-            <InputGroup>
-              <FormControl
-                placeholder="Search Employee"
-                aria-label="Search Employee"
-                aria-describedby="search-icon"
-              />
-              <InputGroup.Text id="search-icon">
-                <FaSearch />
-              </InputGroup.Text>
-            </InputGroup>
-          </Col>
-          <Col className="text-end">
-            <FaUserCircle size={20} />
-          </Col>
-        </Row>
+      <Row className={HomeCSS.header}>
+      <Col>
+        <InputGroup>
+          <FormControl
+            placeholder="Search Employee"
+            aria-label="Search Employee"
+            aria-describedby="search-icon"
+            className={HomeCSS.formControl}
+          />
+          <InputGroup.Text id="search-icon" className={HomeCSS.inputGroupText}>
+            <FaSearch className={HomeCSS.faSearch} />
+          </InputGroup.Text>
+        </InputGroup>
+      </Col>
+      <Col className={HomeCSS.textEnd}>
+        <FaUserCircle className={HomeCSS.faUserCircle} />
+      </Col>
+    </Row>
         <div className={HomeCSS['employee-directory']}>
           {employees.map((employee) => (
             <Card className={HomeCSS['employee-card']} key={employee.id}>
@@ -51,6 +55,7 @@ const Home = () => {
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 };

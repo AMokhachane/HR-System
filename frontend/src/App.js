@@ -4,6 +4,9 @@ import Home from './Home';
 import Navbar from './Navbar'; // Import your Navbar
 import AddEmployee from "./AddEmployee";
 import ViewProfile from "./ViewProfile";
+import Login from './Login';
+import ForgotPassword from './ForgotPassword';
+import Register from './Register';
 
 // Wrapper component to conditionally render the Navbar
 const ConditionalNavbar = () => {
@@ -22,6 +25,9 @@ function App() {
     <Router>
       <ConditionalNavbar /> {/* Navbar will only show on the home page */}
       <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
         <Route path="/view-profile" element={<ViewProfile />} />
         <Route path="/add-employee" element={<AddEmployee />} />

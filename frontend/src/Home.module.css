@@ -1,7 +1,61 @@
+.container{
+  display: flex;
+    height: 100vh;
+ } 
+
+ .rightSide{
+  width: 70%;
+  background-color: #EFEBEB;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.leftSide{
+  width: 30%;
+  background-color: #363673;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .header {
-  padding: 30px;
-  border-bottom: 1px solid #ddd;
-  }
+  width: 465px; /* Set the width of the header */
+  height: 20px; /* Set the height of the header */
+  display: flex;
+  align-items: center; /* Vertically center items within the header */
+  justify-content: space-between; /* Space items between start and end */
+  padding: 0.5rem; /* Add some padding if needed */
+  box-sizing: border-box; /* Ensure padding and border are included in width/height */
+}
+
+.header .form-control {
+  width: calc(100% - 40px); /* Adjust width to fit within header, accounting for icon */
+  height: 100%; /* Ensure full height */
+  padding: 0; /* Remove padding for better alignment */
+  margin-right: 0.5rem; /* Space between search input and icon */
+}
+
+.header .input-group-text {
+  height: 100%; /* Ensure full height */
+  border-radius: 0; /* Optional: remove border-radius for a more uniform look */
+  padding: 0.2rem; /* Adjust padding as needed */
+}
+
+.header .text-end {
+  display: flex;
+  align-items: center; /* Vertically center the icon */
+  height: 100%; /* Ensure full height */
+}
+
+.header .fa-search {
+  font-size: 16px; /* Adjust size as needed */
+}
+
+.header .fa-user-circle {
+  font-size: 20px; /* Adjust size as needed */
+}
    
 .employee-directory {
 	display: flex;
@@ -21,12 +75,12 @@
   transition: all 0.3s ease;
   }
   
-  .container{
-	margin-left: 260px;
- } 
+ 
 
  .employee-card img {
 	width: 250px; /* Makes the image responsive to the card's width */
 	height: auto; /* Maintains the aspect ratio */
 	border-bottom: 1px solid #ddd; /* Optional: adds a border below the image */
   }
+
+  
