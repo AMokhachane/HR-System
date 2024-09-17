@@ -43,13 +43,40 @@ namespace api.Controllers
 
         //This is the post form for a new employee
         [HttpPost]
-public IActionResult Create([FromBody] Employee employee)
+[HttpPost]
+public IActionResult Create([FromBody] CreateEmployeeRequestDto employeeDto)
 {
-    // Assuming you no longer need a DTO conversion here
-    _context.Employees.Add(employee);
-    _context.SaveChanges();
-    
-    return CreatedAtAction(nameof(GetById), new { id = employee.EmployeeId }, employee);
+    // Validate the incoming request
+    if (!ModelState.IsValid)
+    {
+        return BadRequest(ModelState);
+    }
+
+    // Manually map properties from DTO to the Employee model
+    var employeeModel = new Employee
+    {
+        Name = employeeDto.Name,
+        Surname = employeeDto.Surname,
+        Email = employeeDto.Email
+        // Map other properties as needed
+    };
+
+    // Add the employee to the context
+    _context.Employees.Add(employeeModel);
+
+    try
+    {
+        // Save changes to the database
+        _context.SaveChanges();
+    }
+    catch (Exception ex)
+    {
+        // Handle any exceptions that might occur
+        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+    }
+
+    // Return a response with status code 201 (Created)
+    return CreatedAtAction(nameof(GetById), new { id = employeeModel.EmployeeId }, employeeModel);
 }
     }
 }

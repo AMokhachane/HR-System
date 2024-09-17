@@ -1,9 +1,18 @@
 .parentContainer {
     display: flex;
+    height: 100vh;
+ } 
+
+.leftSide{
+  width: 30%;
+  background-color: #363673;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .box {
-    margin-left: 250px; /* Adjust this value as needed to ensure the content is not hidden */
+    margin-left: 120px; /* Adjust this value as needed to ensure the content is not hidden */
     padding: 20px;
     width: calc(100% - 250px); /* Ensure the width accounts for the sidebar */
     box-sizing: border-box;

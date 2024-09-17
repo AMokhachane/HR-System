@@ -6,13 +6,14 @@ import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from "./Sidebar";
 
 const AddEmployee = () => {
-    const [fullName, setFullName] = useState("");
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [identityNumber, setIdentityNumber] = useState("");
+    const [passportNumber, setPassportNumber] = useState("");
     const [dateOfBirth, setDateOfBirth] = useState("");
     const [gender, setGender] = useState("");
-    const [imageId, setImageId] = useState("");
+    const [url, setUrl] = useState("");
     const [taxNumber, setTaxNumber] = useState("");
     const [maritalStatus, setMaritalStatus] = useState("");
     const [physicalAddress, setPhysicalAddress] = useState("");
@@ -23,7 +24,7 @@ const AddEmployee = () => {
     const [endDate, setEndDate] = useState("");
     const [profilePicture, setProfilePicture] = useState(null);
     const [successMessage, setSuccessMessage] = useState("");
-    const [errors, setErrors] = useState({}); // Combine all errors into a single state
+    const [errors, setErrors] = useState({});
     const fileInputRef = useRef(null);
 
     const handleFileClick = () => {
@@ -31,16 +32,17 @@ const AddEmployee = () => {
     };
 
     const uploadEmployeeData = async () => {
-        const newErrors = {}; // Object to store validation errors
+        const newErrors = {};
 
         // Validate form fields
-        if (!fullName) newErrors.fullName = "Full Name is required";
+        if (!name) newErrors.name = "Name is required";
+        if (!surname) newErrors.surname = "Surname is required";
         if (!email) newErrors.email = "Email is required";
-        if (!password) newErrors.password = "Password is required";
         if (!identityNumber) newErrors.identityNumber = "Identity Number is required";
+        if (!passportNumber) newErrors.passportNumber = "Passport Number is required";
         if (!dateOfBirth) newErrors.dateOfBirth = "Date of Birth is required";
         if (!gender) newErrors.gender = "Gender is required";
-        if (!imageId) newErrors.imageId = "Image ID is required";
+        if (!url) newErrors.url = "Profile Picture is required";
         if (!taxNumber) newErrors.taxNumber = "Tax Number is required";
         if (!maritalStatus) newErrors.maritalStatus = "Marital Status is required";
         if (!physicalAddress) newErrors.physicalAddress = "Physical Address is required";
@@ -49,30 +51,40 @@ const AddEmployee = () => {
         if (!contractType) newErrors.contractType = "Contract Type is required";
         if (!startDate) newErrors.startDate = "Start Date is required";
         if (!endDate) newErrors.endDate = "End Date is required";
-        if (!profilePicture) newErrors.profilePicture = "Profile Picture is required";
+
+        console.log("Validation errors:", newErrors);
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             return;
         }
 
-        // Upload profile picture
+        // Log form data before upload
+        console.log("Uploading employee data:", {
+            name, surname, email, identityNumber, passportNumber,
+            dateOfBirth, gender, url, taxNumber, maritalStatus,
+            physicalAddress, postalAddress, salary, contractType,
+            startDate, endDate
+        });
+
         const formData = new FormData();
         formData.append("file", profilePicture);
         formData.append("upload_preset", "your_upload_preset");
 
         try {
             const response = await axios.post("https://api.cloudinary.com/v1_1/your_cloud_name/image/upload", formData);
+            console.log("Cloudinary upload response:", response);
+            
             const imageUrl = response.data.secure_url;
-
             const employeePayload = {
-                fullName,
+                name,
+                surname,
                 email,
-                password,
                 identityNumber,
+                passportNumber,
                 dateOfBirth,
                 gender,
-                imageId,
+                url: imageUrl,
                 taxNumber,
                 maritalStatus,
                 physicalAddress,
@@ -80,20 +92,23 @@ const AddEmployee = () => {
                 salary,
                 contractType,
                 startDate,
-                endDate,
-                profilePictureUrl: imageUrl,
+                endDate
             };
 
-            await axios.post("http://localhost:5205/api/employee", employeePayload);
+            const employeeResponse = await axios.post("http://localhost:5239/api/employee", employeePayload);
+            console.log("Employee creation response:", employeeResponse);
+
             setSuccessMessage("Employee added successfully!");
+            
             // Clear form
-            setFullName("");
+            setName("");
+            setSurname("");
             setEmail("");
-            setPassword("");
             setIdentityNumber("");
+            setPassportNumber("");
             setDateOfBirth("");
             setGender("");
-            setImageId("");
+            setUrl("");
             setTaxNumber("");
             setMaritalStatus("");
             setPhysicalAddress("");
@@ -102,7 +117,6 @@ const AddEmployee = () => {
             setContractType("");
             setStartDate("");
             setEndDate("");
-            setProfilePicture(null);
             setErrors({});
         } catch (error) {
             console.error("Error uploading employee data:", error);
@@ -111,19 +125,35 @@ const AddEmployee = () => {
 
     return (
         <div className={styles.parentContainer}>
-            <Sidebar />
+      <div className={styles.leftSide}>
+      <div className={styles.sidebar}>
+        <Sidebar/>
+      </div>
+      </div>
+     
             <div className={styles.box}>
                 <h2 className={styles.heading}>Add New Employee</h2>
                 {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
                 <form>
                     <div className={styles.formGroup}>
-                        <label className={styles.label}>Full Name</label>
-                        {errors.fullName && <p className={styles.errorMessage}>{errors.fullName}</p>}
+                        <label className={styles.label}>Name</label>
+                        {errors.name && <p className={styles.errorMessage}>{errors.name}</p>}
                         <input
                             type="text"
                             className={styles.inputField}
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Surname</label>
+                        {errors.surname && <p className={styles.errorMessage}>{errors.surname}</p>}
+                        <input
+                            type="text"
+                            className={styles.inputField}
+                            value={surname}
+                            onChange={(e) => setSurname(e.target.value)}
                         />
                     </div>
 
@@ -139,17 +169,6 @@ const AddEmployee = () => {
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label className={styles.label}>Password</label>
-                        {errors.password && <p className={styles.errorMessage}>{errors.password}</p>}
-                        <input
-                            type="password"
-                            className={styles.inputField}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-
-                    <div className={styles.formGroup}>
                         <label className={styles.label}>Identity Number</label>
                         {errors.identityNumber && <p className={styles.errorMessage}>{errors.identityNumber}</p>}
                         <input
@@ -157,6 +176,17 @@ const AddEmployee = () => {
                             className={styles.inputField}
                             value={identityNumber}
                             onChange={(e) => setIdentityNumber(e.target.value)}
+                        />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Passport Number</label>
+                        {errors.passportNumber && <p className={styles.errorMessage}>{errors.passportNumber}</p>}
+                        <input
+                            type="text"
+                            className={styles.inputField}
+                            value={passportNumber}
+                            onChange={(e) => setPassportNumber(e.target.value)}
                         />
                     </div>
 
@@ -187,14 +217,23 @@ const AddEmployee = () => {
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label className={styles.label}>Image ID</label>
-                        {errors.imageId && <p className={styles.errorMessage}>{errors.imageId}</p>}
-                        <input
-                            type="text"
-                            className={styles.inputField}
-                            value={imageId}
-                            onChange={(e) => setImageId(e.target.value)}
-                        />
+                        <label className={styles.label}>Profile Picture</label>
+                        {errors.profilePicture && <p className={styles.errorMessage}>{errors.profilePicture}</p>}
+                        <div
+                            className={styles.dropzone}
+                            onClick={handleFileClick}
+                        >
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                className={styles.hiddenInput}
+                                onChange={(event) => {
+                                    setProfilePicture(event.target.files[0]);
+                                }}
+                            />
+                            <FontAwesomeIcon icon={faUserPlus} className={styles.dropzoneIcon} />
+                            <span className={styles.dropzoneText}>Upload Profile Picture</span>
+                        </div>
                     </div>
 
                     <div className={styles.formGroup}>
@@ -291,24 +330,6 @@ const AddEmployee = () => {
                             onChange={(e) => setEndDate(e.target.value)}
                         />
                     </div>
-
-                    {errors.profilePicture && <p className={styles.errorMessage}>{errors.profilePicture}</p>}
-                    <div
-                        className={styles.dropzone}
-                        onClick={handleFileClick}
-                    >
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            className={styles.hiddenInput}
-                            onChange={(event) => {
-                                setProfilePicture(event.target.files[0]);
-                            }}
-                        />
-                        <FontAwesomeIcon icon={faUserPlus} className={styles.dropzoneIcon} />
-                        <span className={styles.dropzoneText}>Upload Profile Picture</span>
-                    </div>
-                    
                     <div className={styles.rightAlign}>
                         <button type="button" className={styles.uploadButton} onClick={uploadEmployeeData}>Add Employee</button>
                     </div>
