@@ -4,16 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class ApplicationDBContext : DbContext
+    public class ApplicationDBContext : IdentityDbContext<AppUser>
     {
         public ApplicationDBContext(DbContextOptions dbContextOptions)
-        : base(dbContextOptions)
+            : base(dbContextOptions)
         {
-            
         }
 
         public DbSet<Employee> Employees { get; set; }
@@ -22,6 +22,24 @@ namespace api.Data
         public DbSet<JobTitle> JobTitles { get; set; }
         public DbSet<LeavePolicy> LeavePolicies { get; set; }
         public DbSet<Qualification> Qualifications { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<ForgotPasswordModel> ForgotPasswordModels { get; set; }
+        public DbSet<Login> Logins { get; set; }
+        public DbSet<ResetPasswordModel> ResetPasswordModels { get; set; }
+        public DbSet<UserPasswordHistory> UserPasswordHistories { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // Seed roles
+            List<IdentityRole> roles = new List<IdentityRole>
+            {
+                new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
+                new IdentityRole { Name = "User", NormalizedName = "USER" }
+            };
+            
+            builder.Entity<IdentityRole>().HasData(roles);
+        }
     }
 }
