@@ -12,7 +12,8 @@ namespace api.Dtos.Employee
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string IdentityNumber { get; set; } = string.Empty;
-        public int DateOfBirth { get; set; }
+        public string PassportNumber { get; set; } = string.Empty;
+        public DateOnly DateOfBirth { get; set; }
         public string Gender { get; set; } = string.Empty;
         public int ImageId { get; set; }
         public string TaxNumber { get; set; } = string.Empty;
