@@ -20,36 +20,61 @@ const Testing = () => {
 		salary: '',
 		contractType: '',
 		startDate: '',
-		endDate: ''
+		endDate: '',
+		url: '' // Adding a field for the image URL
 	});
-
-	const handleFileClick = () => {
-		const uploadFormData = new FormData();
-		uploadFormData.append("file", imageSelected);
-		uploadFormData.append("upload_preset", "zmp53t7t");
-
-		axios.post("https://api.cloudinary.com/v1_1/drgxphf5l/image/upload", 
-		uploadFormData
-		).then((response) => {
-			// Store the uploaded image URL in the form data and imageUrls state
-			setFormData((prevData) => ({
-				...prevData,
-				url: response.data.secure_url
-			}));
-			setImageUrls((prev) => [...prev, response.data.secure_url]);
-		});
-	};
+	const [loading, setLoading] = useState(false);
 
 	const handleSubmit = (e) => {
-		e.preventDefault(); // Prevent the default form submission
-		// Post formData to your backend API
-		axios.post("http://localhost:5239/api/employee", formData)
-			.then(response => {
-				console.log("Data successfully sent to backend:", response.data);
-			})
-			.catch(error => {
-				console.error("Error sending data:", error);
-			});
+		e.preventDefault();
+		setLoading(true); // Set loading to true while image is uploading
+
+		// Step 1: Upload image to Cloudinary
+		if (imageSelected) {
+			const uploadFormData = new FormData();
+			uploadFormData.append("file", imageSelected);
+			uploadFormData.append("upload_preset", "zmp53t7t");
+
+			axios.post("https://api.cloudinary.com/v1_1/drgxphf5l/image/upload", uploadFormData)
+				.then((response) => {
+					const imageUrl = response.data.secure_url;
+
+					// Step 2: Update formData with the uploaded image URL
+					setFormData((prevData) => ({
+						...prevData,
+						url: imageUrl
+					}));
+
+					// Step 3: Post formData to your backend API after image upload
+					axios.post("http://localhost:5239/api/employee", { ...formData, url: imageUrl })
+						.then(response => {
+							console.log("Data successfully sent to backend:", response.data);
+							setImageUrls((prev) => [...prev, imageUrl]); // Optional: update imageUrls for display
+						})
+						.catch(error => {
+							console.error("Error sending data:", error);
+						})
+						.finally(() => {
+							setLoading(false); // Reset loading state
+						});
+				})
+				.catch(error => {
+					console.error("Error uploading image:", error);
+					setLoading(false); // Reset loading state even if there's an error
+				});
+		} else {
+			// If no image is selected, just submit the form data
+			axios.post("http://localhost:5239/api/employee", formData)
+				.then(response => {
+					console.log("Data successfully sent to backend:", response.data);
+				})
+				.catch(error => {
+					console.error("Error sending data:", error);
+				})
+				.finally(() => {
+					setLoading(false); // Reset loading state
+				});
+		}
 	};
 
 	// Handle form input changes
@@ -63,17 +88,17 @@ const Testing = () => {
 
 	return (
 		<div>
-			{/* Image Upload */}
-			<input
-				type='file'
-				onChange={(event) => {
-					setImageSelected(event.target.files[0]);
-				}}
-			/>
-			<button onClick={handleFileClick}>Upload Image</button>
-
 			{/* Form for additional details */}
 			<form onSubmit={handleSubmit}>
+				{/* File upload */}
+				<input
+					type='file'
+					onChange={(event) => {
+						setImageSelected(event.target.files[0]);
+					}}
+				/>
+
+				{/* Other form fields */}
 				<input
 					type="text"
 					name="name"
@@ -177,8 +202,10 @@ const Testing = () => {
 					onChange={handleInputChange}
 				/>
 
-				{/* Submit button to send the form data along with the image */}
-				<button type="submit">Submit Form</button>
+				{/* Submit button to handle image upload and form submission */}
+				<button type="submit" disabled={loading}>
+					{loading ? 'Submitting...' : 'Submit Form and Upload Image'}
+				</button>
 			</form>
 
 			{/* Display uploaded images */}
