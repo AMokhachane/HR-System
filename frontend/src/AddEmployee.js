@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+
 import styles from './AddEmployee.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
@@ -25,11 +26,24 @@ const AddEmployee = () => {
     const [profilePicture, setProfilePicture] = useState(null);
     const [successMessage, setSuccessMessage] = useState("");
     const [errors, setErrors] = useState({});
-    const fileInputRef = useRef(null);
+
+    const [imageSelected, setImageSelected] = useState("");
+	const [imageUrls, setImageUrls] = useState([]);
+
 
     const handleFileClick = () => {
-        fileInputRef.current.click();
-    };
+		const formData = new FormData();
+		formData.append("file", imageSelected);
+		formData.append("upload_preset", "zmp53t7t");
+
+		axios.post("https://api.cloudinary.com/v1_1/drgxphf5l/image/upload", 
+		formData
+		).then((response) => {
+			// Add the uploaded image URL to the imageUrls array
+			setImageUrls((prev) => [...prev, response.data.secure_url]);
+			console.log(response);
+		});
+	};
 
     const uploadEmployeeData = async () => {
         const newErrors = {};
@@ -216,25 +230,14 @@ const AddEmployee = () => {
                         </select>
                     </div>
 
-                    <div className={styles.formGroup}>
-                        <label className={styles.label}>Profile Picture</label>
-                        {errors.profilePicture && <p className={styles.errorMessage}>{errors.profilePicture}</p>}
-                        <div
-                            className={styles.dropzone}
-                            onClick={handleFileClick}
-                        >
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                className={styles.hiddenInput}
-                                onChange={(event) => {
-                                    setProfilePicture(event.target.files[0]);
-                                }}
-                            />
-                            <FontAwesomeIcon icon={faUserPlus} className={styles.dropzoneIcon} />
-                            <span className={styles.dropzoneText}>Upload Profile Picture</span>
-                        </div>
-                    </div>
+                    <input
+				type='file'
+				onChange={(event) => {
+					setImageSelected(event.target.files[0]);
+				}}
+			/>
+			<button onClick={handleFileClick}>Upload Image</button>
+                    
 
                     <div className={styles.formGroup}>
                         <label className={styles.label}>Tax Number</label>

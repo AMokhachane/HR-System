@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col, Card, InputGroup, FormControl } from 'react-bootstrap';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import HomeCSS from './Home.module.css'; // Use the CSS module
 import Sidebar from './Sidebar'
+import { Image } from 'cloudinary-react';
 
 const employees = [
   { id: 1, fullName: 'Jessica Jones', JobTitle: 'Senior HR Manager', email: 'jessica@xyz.com', phone: '7463', image: 'https://via.placeholder.com/150' },
   { id: 2, fullName: 'Leeds Garber', JobTitle: 'HR Manager', email: 'leeds@xyz.com', phone: '5678', image: 'https://via.placeholder.com/150' },
-  { id: 3, fullName: 'CRM Jessica', JobTitle: 'HR', email: 'crm@xyz.com', phone: '9876', image: 'https://via.placeholder.com/150' },
-  {id: 4, fullName: 'Amanda Mokhachane', JobTitle: 'HR', email: 'crm@xyz.com', phone: '9876', image: 'https://via.placeholder.com/150' },
-{id: 5, fullName: 'Sandile Mabaso', JobTitle: 'HR', email: 'crm@xyz.com', phone: '9876', image: 'https://via.placeholder.com/150' },
-{id: 6, fullName: 'Nhlayiseko Vhuma', JobTitle: 'HR', email: 'crm@xyz.com', phone: '9876', image: 'https://via.placeholder.com/150' },
+  
 ];
 
 const Home = () => {
+  const [imageUrls, setImageUrls] = useState([]);
+  
   return (
     <div className={HomeCSS.container}>
       <div className={HomeCSS.leftSide}>
@@ -37,6 +37,16 @@ const Home = () => {
           </InputGroup.Text>
         </InputGroup>
       </Col>
+      <div>
+				{imageUrls.map((url, index) => (
+					<Image
+						key={index}
+						style={{ width: 200, margin: 10 }}
+						cloudName="drgxphf5l"
+						publicId={url}
+					/>
+				))}
+			</div>
       <Col className={HomeCSS.textEnd}>
         <FaUserCircle className={HomeCSS.faUserCircle} />
       </Col>
