@@ -92,15 +92,7 @@ const Login = () => {
 
       <div className={styles.rightSide}>
         <div className={styles.iconGrid}>
-          <div className={styles.circle}></div>
-          <div className={styles.square}></div>
-          <div className={styles.circle}></div>
-          <div className={styles.square}></div>
-          <div className={styles.circle}></div>
-          <div className={styles.square}></div>
-          <div className={styles.circle}></div>
-          <div className={styles.square}></div>
-          <div className={styles.circle}></div>
+        <img src="https://res.cloudinary.com/drgxphf5l/image/upload/v1726736758/qwbddlqxjjgxsvbdcudg.png" className='image' />
         </div>
       </div>
     </div>

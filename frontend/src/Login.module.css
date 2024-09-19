@@ -19,7 +19,7 @@
 
 .rightSide {
     width: 30%;
-    background-color: #363673;
+    background-color: #2B4F63;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -62,6 +62,7 @@
 .Group {
     margin-bottom: 20px;
     width: 100%;
+    margin-left: 350px;
 }
 
 .label {
@@ -88,32 +89,17 @@
     margin-bottom: 5px;
 }
 
-.iconGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 50px);
-    gap: 20px;
-}
-
-.circle, .square {
-    width: 60px;
-    height: 60px;
-    background-color: #FFC0CB;
-}
-
-.circle {
-    border-radius: 50%;
-}
-
 .forgotPasswordAndButton {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%; /* Ensures full width of the container */
+    width: 70%; /* Ensures full width of the container */
     margin-top: 20px; /* Adds some space from the input fields */
+    margin-left: 350px;
 }
 
 .forgotPassword {
-    color: #363673;
+    color: #2B4F63;
     text-decoration: none;
     margin-right: 20px; /* Adds space between link and button */
 }
@@ -121,7 +107,7 @@
 .loginButton {
     width: 104px; /* Set width to 104px */
     height: 37px; /* Set height to 37px */
-    background-color: #363673;
+    background-color: #2B4F63;
     color: white;
     border: none;
     border-radius: 5px;
@@ -130,4 +116,6 @@
     display: flex;
     align-items: center;
     justify-content: center; /* Centers text inside the button */
+    margin-right: 415px;
 }
+
