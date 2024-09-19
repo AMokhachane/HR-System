@@ -5,8 +5,10 @@ import Navbar from './Navbar'; // Import your Navbar
 import AddEmployee from "./AddEmployee";
 import ViewProfile from "./ViewProfile";
 import Login from './Login';
-import ForgotPassword from './ForgotPassword';
+import ResetPassword from './ResetPassword';
 import Register from './Register';
+import Password from './Password';
+import Email from './Email';
 
 
 
@@ -28,11 +30,13 @@ function App() {
       <ConditionalNavbar /> {/* Navbar will only show on the home page */}
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/password" element={<Password />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
         <Route path="/view-profile" element={<ViewProfile />} />
         <Route path="/add-employee" element={<AddEmployee />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/email" element={<Email/>} />
         
       </Routes>
     </Router>

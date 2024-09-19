@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import styles from './ForgotPassword.module.css'; // Assuming CSS is scoped via modules
+import styles from './Password.module.css'; // Assuming CSS is scoped via modules
 import { useNavigate } from 'react-router-dom';
 
-const ForgotPassword = () => {
+const Password = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState({});
@@ -66,25 +66,18 @@ const ForgotPassword = () => {
                         />
                     </div>
 
-                    <button type="submit" className={styles.resetButton}>Reset Password</button>
+                    <button type="submit" className={styles.resetButton}>Submit</button>
                 </form>
             </div>
 
             <div className={styles.rightSide}>
                 <div className={styles.iconGrid}>
-                    <div className={styles.circle}></div>
-                    <div className={styles.square}></div>
-                    <div className={styles.circle}></div>
-                    <div className={styles.square}></div>
-                    <div className={styles.circle}></div>
-                    <div className={styles.square}></div>
-					<div className={styles.circle}></div>
-                    <div className={styles.square}></div>
-                    <div className={styles.circle}></div>
+				<img src="https://res.cloudinary.com/drgxphf5l/image/upload/v1726736758/qwbddlqxjjgxsvbdcudg.png" className='image' />
+                 
                 </div>
             </div>
         </div>
     );
 };
 
-export default ForgotPassword;
+export default Password;

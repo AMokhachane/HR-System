@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import axios
 import styles from "./Login.module.css"; // Assuming CSS is scoped via modules
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const [serverError, setServerError] = useState(""); // To handle server-side errors
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors = {};
-    if (!username) newErrors.username = "Username is required";
+    if (!email) newErrors.email = "Email is required";
     if (!password) newErrors.password = "Password is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -23,18 +24,21 @@ const Login = () => {
     if (validateForm()) {
       try {
         // API call to login
-        const response = await axios.post("/login", {
-          email: username, // Assuming email is used as the username
+        const response = await axios.post("http://localhost:5239/api/accounts/login", {
+          email: email, // Assuming email is used as the username
           password: password,
           remember: true, // Optional: pass the "Remember Me" option
         });
 
         // Handle success
         if (response.status === 200) {
-          setSuccessMessage(response.data.message); // e.g., "Login successful!"
-          setUsername("");
+          const { userEmail, userName, userID } = response.data;
+          localStorage.setItem("user", JSON.stringify({ userName, userEmail, userID }));
+          setSuccessMessage("Login successful!");
+          setEmail("");
           setPassword("");
           setErrors({});
+          navigate("/home");
         }
       } catch (error) {
         // Handle errors from the server
@@ -58,13 +62,14 @@ const Login = () => {
         {serverError && <p className={styles.errorMessage}>{serverError}</p>} {/* Display server errors */}
         <form onSubmit={handleLogin}>
           <div className={styles.Group}>
-            <label className={styles.label}>Username</label>
-            {errors.username && <p className={styles.errorMessage}>{errors.username}</p>}
+            <label className={styles.label}>Email</label>
+            {errors.email && <p className={styles.errorMessage}>{errors.email}</p>}
             <input
-              type="text"
+              type="email"
               className={styles.inputField}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
 
@@ -76,11 +81,12 @@ const Login = () => {
               className={styles.inputField}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
           <div className={styles.forgotPasswordAndButton}>
-            <Link to="/forgot-password" className={styles.forgotPassword}>
+            <Link to="/email" className={styles.forgotPassword}>
               Forgot Password?
             </Link>
             <button type="submit" className={styles.loginButton}>

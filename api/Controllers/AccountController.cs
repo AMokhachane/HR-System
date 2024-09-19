@@ -260,7 +260,7 @@ signInManager = sm;
             // Generate password reset token
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = WebUtility.UrlEncode(token);
-            var resetLink = $"https://localhost:5173/resetpassword?email={model.Email}&token={encodedToken}";
+            var resetLink = $"https://localhost:5239/resetpassword?email={model.Email}&token={encodedToken}";
 
             // Send the reset password email
             // Email template for password reset

@@ -83,4 +83,18 @@
 	border-bottom: 1px solid #ddd; /* Optional: adds a border below the image */
   }
 
+  .imageContainer {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.uploadedImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
   
