@@ -29,7 +29,7 @@ const Password = () => {
 
             // Redirect or handle further logic after password reset
             setTimeout(() => {
-                navigate('/login'); // Redirect to login page after success
+                navigate('/'); // Redirect to login page after success
             }, 2000);
         }
     };

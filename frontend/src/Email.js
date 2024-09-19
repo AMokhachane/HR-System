@@ -22,7 +22,7 @@ const Email = () => {
 
         try {
             // Call the API to send the reset password email
-            const response = await axios.post('http://localhost:5276/api/accounts/forgotpassword', { email });
+            const response = await axios.post('http://localhost:5239/api/accounts/forgotpassword', { email });
             setSuccessMessage(response.data.message);
 
             // Optionally redirect after a few seconds
