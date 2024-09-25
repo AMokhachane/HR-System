@@ -8,22 +8,21 @@ namespace api.Dtos.Employee
     public class EmployeeDto
     {
         public int EmployeeId { get; set; }
-        public string Name { get; set; } = string.Empty;
-         public string Surname { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string IdentityNumber { get; set; } = string.Empty;
-        public string PassportNumber { get; set; } = string.Empty;
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Email { get; set; }
+        public string IdentityNumber { get; set; }
+        public string PassportNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string Gender { get; set; } = string.Empty;
-        public string Url { get; set; } = string.Empty;
-        public string TaxNumber { get; set; } = string.Empty;
-        public string MaritalStatus { get; set; } = string.Empty;
-        public string PhysicalAddress { get; set; } = string.Empty;
-        public string PostalAddress { get; set; } = string.Empty;
-        public int Salary { get; set; }
-        public string ContractType { get; set; } = string.Empty;
-        public DateTime StartDate { get; set; } = DateTime.Now;
+        public string Gender { get; set; }
+        public string TaxNumber { get; set; }
+        public string MaritalStatus { get; set; }
+        public string PhysicalAddress { get; set; }
+        public string PostalAddress { get; set; }
+        public decimal Salary { get; set; }
+        public string ContractType { get; set; }
+        public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        
+        public string Url { get; set; } // Image URL
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -58,7 +58,7 @@ signInManager = sm;
                 // Create a new user object
                 AppUser newUser = new AppUser
                 {
-                    Name = user.Name,
+                 
                     Email = user.Email,
                     UserName = user.UserName,
                    
@@ -103,7 +103,7 @@ signInManager = sm;
                 // Email template for registration confirmation
                 string confirmationEmailTemplate = $@"
     <h1>Welcome to Image App Gallery</h1>
-    <h3>Dear {user.Name}</h3>
+    <h3>Dear </h3>
     <p>We are thrilled to have you join our community. At <span style='color: #2187AB;'>ImageApp Gallery</span>, we strive to provide you with the best experience for exploring and sharing stunning images.</p>
     <p>Thank you for signing up! Here are a few things you can do to get started:</p>
     <ul>
@@ -210,7 +210,7 @@ signInManager = sm;
 
                 if (result.Succeeded)
                 {
-                    user.LastLogin = DateTime.Now;
+                    
                     var updateResult = await userManager.UpdateAsync(user);
                     if (!updateResult.Succeeded)
                     {
@@ -219,7 +219,7 @@ signInManager = sm;
                     }
 
                     logger.LogInformation("User {UserId} logged in successfully", user.Id);
-                    return Ok(new { message = "Login successful.", userName = user.Name, userEmail = user.Email ,  userID = user.Id});
+                    return Ok(new { message = "Login successful.", userEmail = user.Email ,  userID = user.Id});
                 }
 
                 if (result.RequiresTwoFactor)
@@ -266,7 +266,7 @@ signInManager = sm;
             // Email template for password reset
             string resetPasswordEmailTemplate = $@"
     <h1>Password reset for Image App Gallery</h1>
-    <h3>Hi {user.Name}</h3>
+    <h3>Hi</h3>
     <p>We received a request to reset the password for your account associated with this email address. If you did not make this request, please ignore this email.</p>
     <div style='padding: 0 0 10px;'>
         <h4>To reset your password, please click the button below:</h4>
@@ -359,4 +359,3 @@ signInManager = sm;
 }
 
 }
-

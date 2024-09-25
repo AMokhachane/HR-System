@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class Secondmigration : Migration
+    public partial class FirstOne : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,10 +32,6 @@ namespace api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastLogin = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -57,42 +53,12 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employees",
-                columns: table => new
-                {
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdentityNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PassportNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TaxNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MaritalStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhysicalAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Salary = table.Column<int>(type: "int", nullable: false),
-                    ContractType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Employees", x => x.EmployeeId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ForgotPasswordModels",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -252,6 +218,47 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdentityNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PassportNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TaxNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MaritalStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhysicalAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostalAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ContractType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AspNetUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.EmployeeId);
+                    table.ForeignKey(
+                        name: "FK_Employees_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Employees_AspNetUsers_AspNetUserId",
+                        column: x => x.AspNetUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BankingDetails",
                 columns: table => new
                 {
@@ -356,8 +363,8 @@ namespace api.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a23d1523-08b8-498c-bb6e-5898f36d4774", null, "User", "USER" },
-                    { "f9855f97-ad4a-41bd-a5cf-aa3337ac0a6a", null, "Admin", "ADMIN" }
+                    { "bf4cc8ea-3ca9-471c-a37a-a474a382045b", null, "Admin", "ADMIN" },
+                    { "d2bbc04b-9ed4-4ff1-a064-40f0bed6208f", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -403,6 +410,17 @@ namespace api.Migrations
                 name: "IX_BankingDetails_EmployeeId",
                 table: "BankingDetails",
                 column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_AppUserId",
+                table: "Employees",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_AspNetUserId",
+                table: "Employees",
+                column: "AspNetUserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobGrades_JobTitleId",
@@ -468,9 +486,6 @@ namespace api.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "JobGrades");
 
             migrationBuilder.DropTable(
@@ -478,6 +493,9 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

@@ -7,76 +7,111 @@ using api.Dtos.Employee;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+
+using Microsoft.Extensions.Logging;
+
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+using System.Security.Claims;
+
+using api.Interfaces;
 
 namespace api.Controllers
 {
-    [Route("api/employee")]
-    [ApiController]
-    public class EmployeeController : ControllerBase
-    {
-        private readonly ApplicationDBContext _context;
-        public EmployeeController(ApplicationDBContext context)
-        {
-            _context = context;
-        }
 
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var employees = _context.Employees.ToList()
-            .Select(s => s.ToEmployeeDto());
 
-            return Ok(employees);
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
-        {
-            var employee = _context.Employees.Find(id);
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(employee.ToEmployeeDto());
-        }
-
-        //This is the post form for a new employee
-        [HttpPost]
-[HttpPost]
-public IActionResult Create([FromBody] CreateEmployeeRequestDto employeeDto)
+[ApiController]
+[Route("api/[controller]")]
+public class EmployeeController : ControllerBase
 {
-    // Validate the incoming request
-    if (!ModelState.IsValid)
+    private readonly UserManager<AppUser> _userManager;
+    private readonly ApplicationDBContext _context;
+    private readonly ISenderEmail _emailSender;
+
+    public EmployeeController(UserManager<AppUser> userManager, ApplicationDBContext context, ISenderEmail emailSender)
     {
-        return BadRequest(ModelState);
+        _userManager = userManager;
+        _context = context;
+        _emailSender = emailSender;
     }
 
-    // Manually map properties from DTO to the Employee model
-    var employeeModel = new Employee
+    [HttpPost]
+    public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto employeeDto)
     {
-        Name = employeeDto.Name,
-        Surname = employeeDto.Surname,
-        Email = employeeDto.Email
-        // Map other properties as needed
-    };
+        // Step 1: Create a new user in AspNetUsers
+        var user = new AppUser
+        {
+            UserName = employeeDto.Email,
+            Email = employeeDto.Email,
+            EmailConfirmed = false
+        };
 
-    // Add the employee to the context
-    _context.Employees.Add(employeeModel);
+        var result = await _userManager.CreateAsync(user);
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors);
+        }
 
-    try
-    {
-        // Save changes to the database
-        _context.SaveChanges();
+        // Step 2: Generate an email confirmation token
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmationLink = Url.Action(nameof(ConfirmEmail), "Employee", new { token, email = user.Email }, Request.Scheme);
+
+        // Step 3: Send confirmation email
+        await _emailSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: {confirmationLink}");
+
+        // Step 4: Create an employee record
+        var employee = new Employee
+        {
+            Name = employeeDto.Name,
+            Surname = employeeDto.Surname,
+            Email = employeeDto.Email,
+            IdentityNumber = employeeDto.IdentityNumber,
+            PassportNumber = employeeDto.PassportNumber,
+            DateOfBirth = employeeDto.DateOfBirth,
+            Gender = employeeDto.Gender,
+            TaxNumber = employeeDto.TaxNumber,
+            MaritalStatus = employeeDto.MaritalStatus,
+            PhysicalAddress = employeeDto.PhysicalAddress,
+            PostalAddress = employeeDto.PostalAddress,
+            Salary = employeeDto.Salary,
+            ContractType = employeeDto.ContractType,
+            StartDate = employeeDto.StartDate,
+            EndDate = employeeDto.EndDate,
+            Url = employeeDto.Url,
+            AspNetUserId = user.Id // Link Employee to User
+        };
+
+        _context.Employees.Add(employee);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { Message = "User created successfully. Please check your email to confirm your account." });
     }
-    catch (Exception ex)
-    {
-        // Handle any exceptions that might occur
-        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-    }
 
-    // Return a response with status code 201 (Created)
-    return CreatedAtAction(nameof(GetById), new { id = employeeModel.EmployeeId }, employeeModel);
+    [HttpGet("ConfirmEmail")]
+    public async Task<IActionResult> ConfirmEmail(string token, string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return BadRequest("Invalid Email.");
+        }
+
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        if (result.Succeeded)
+        {
+            return Ok("Email confirmed successfully.");
+        }
+
+        return BadRequest("Email confirmation failed.");
+    }
 }
-    }
+
+
 }

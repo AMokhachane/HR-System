@@ -52,11 +52,13 @@ const AddEmployee = () => {
           }));
 
           // Step 3: Post formData to your backend API after image upload
-          axios
-            .post("http://localhost:5239/api/employee", {
-              ...formData,
-              url: imageUrl,
-            })
+          axios.post("http://localhost:5239/api/employee", formData)
+          .then(response => {
+            console.log("Data successfully sent to backend:", response.data);
+          })
+          .catch(error => {
+            console.error("Error sending data:", error);
+          })
             .then((response) => {
               console.log("Data successfully sent to backend:", response.data);
               setImageUrls((prev) => [...prev, imageUrl]); // Optional: update imageUrls for display

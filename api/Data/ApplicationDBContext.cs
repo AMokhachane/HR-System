@@ -32,6 +32,15 @@ namespace api.Data
         {
             base.OnModelCreating(builder);
 
+            // Define the relationship between Employee and AppUser
+        builder.Entity<Employee>()
+            .HasOne(e => e.User)
+            .WithOne() // Assuming one-to-one relationship
+            .HasForeignKey<Employee>(e => e.AspNetUserId)
+            .IsRequired();
+
+
+
             // Seed roles
             List<IdentityRole> roles = new List<IdentityRole>
             {

@@ -51,13 +51,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f9855f97-ad4a-41bd-a5cf-aa3337ac0a6a",
+                            Id = "bf4cc8ea-3ca9-471c-a37a-a474a382045b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a23d1523-08b8-498c-bb6e-5898f36d4774",
+                            Id = "d2bbc04b-9ed4-4ff1-a064-40f0bed6208f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -181,9 +181,6 @@ namespace api.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -191,21 +188,11 @@ namespace api.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastLogin")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -287,6 +274,13 @@ namespace api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AspNetUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ContractType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -329,8 +323,8 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Salary")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -349,6 +343,11 @@ namespace api.Migrations
 
                     b.HasKey("EmployeeId");
 
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("AspNetUserId")
+                        .IsUnique();
+
                     b.ToTable("Employees");
                 });
 
@@ -361,14 +360,6 @@ namespace api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -599,10 +590,25 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.BankingDetail", b =>
                 {
                     b.HasOne("api.Models.Employee", "Employee")
-                        .WithMany("BankingDetails")
+                        .WithMany()
                         .HasForeignKey("EmployeeId");
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("api.Models.Employee", b =>
+                {
+                    b.HasOne("api.Models.AppUser", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("api.Models.AppUser", "User")
+                        .WithOne()
+                        .HasForeignKey("api.Models.Employee", "AspNetUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("api.Models.JobGrade", b =>
@@ -617,7 +623,7 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.JobTitle", b =>
                 {
                     b.HasOne("api.Models.Employee", "Employee")
-                        .WithMany("jobTitles")
+                        .WithMany()
                         .HasForeignKey("EmployeeId");
 
                     b.Navigation("Employee");
@@ -635,19 +641,15 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.Qualification", b =>
                 {
                     b.HasOne("api.Models.Employee", "Employee")
-                        .WithMany("Qualifications")
+                        .WithMany()
                         .HasForeignKey("EmployeeId");
 
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("api.Models.Employee", b =>
+            modelBuilder.Entity("api.Models.AppUser", b =>
                 {
-                    b.Navigation("BankingDetails");
-
-                    b.Navigation("Qualifications");
-
-                    b.Navigation("jobTitles");
+                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("api.Models.JobGrade", b =>
