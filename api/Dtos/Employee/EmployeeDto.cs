@@ -24,5 +24,6 @@ namespace api.Dtos.Employee
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Url { get; set; } // Image URL
+        public string PasswordHash { get; set; }
     }
 }

@@ -24,6 +24,7 @@ const AddEmployee = () => {
     startDate: "",
     endDate: "",
     url: "", // Adding a field for the image URL
+    passwordHash: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -140,6 +141,7 @@ const AddEmployee = () => {
               />
             </div>
           </div>
+          
 
           {/* Row 2: Email & Identity Number */}
           <div className={styles.formRow}>
@@ -320,19 +322,36 @@ const AddEmployee = () => {
               />
             </div>
           </div>
-		  <div className={styles.inputGroup}>
-              <label htmlFor="name" className={styles.label}>
-                Salary
-              </label>
-              <input
-                type="number"
-                name="salary"
-                placeholder="Salary"
-                value={formData.salary}
-                onChange={handleInputChange}
-                className={styles.inputField}
-              />
-            </div>
+{/* Salary Field */}
+<div className={styles.inputGroup}>
+    <label htmlFor="name" className={styles.label}>
+        Salary
+    </label>
+    <input
+        type="number"
+        name="salary"
+        placeholder="Salary"
+        value={formData.salary}
+        onChange={handleInputChange}
+        className={styles.inputField}
+    />
+</div>
+
+  {/* Password Field */}
+  <div className={styles.inputGroup}>
+            <label htmlFor="password" className={styles.label}>
+              Password
+            </label>
+            <input
+              type="passwordHash"
+              name="passwordHash"
+              placeholder="Password"
+              value={formData.passwordHash}
+              onChange={handleInputChange}
+              className={styles.inputField}
+            />
+          </div>
+
 
           {/* File upload */}
           <div className={styles.uploadContainer}>

@@ -28,7 +28,8 @@ namespace api.Mappers
                 Salary = employeeModel.Salary,
                 ContractType = employeeModel.ContractType,
                 StartDate = employeeModel.StartDate,
-                EndDate = employeeModel.EndDate
+                EndDate = employeeModel.EndDate,
+                PasswordHash = employeeModel.PasswordHash
                 
             };
         }
@@ -50,7 +51,8 @@ namespace api.Mappers
                 Salary = employeeDto.Salary,
                 ContractType = employeeDto.ContractType,
                 StartDate = employeeDto.StartDate,
-                EndDate = employeeDto.EndDate
+                EndDate = employeeDto.EndDate,
+                PasswordHash = employeeDto.PasswordHash
             };
         }
     }

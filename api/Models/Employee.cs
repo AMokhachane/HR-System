@@ -25,6 +25,8 @@ public class Employee
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string Url { get; set; }
+    public string PasswordHash { get; set; }
+
     public string AspNetUserId { get; set; }  // Foreign key
 
     // Navigation property to AppUser
