@@ -42,37 +42,17 @@ public class EmployeeController : ControllerBase
         _emailSender = emailSender;
     }
 
+
     [HttpPost]
 public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto employeeDto)
 {
-    // Step 1: Create a new user in AspNetUsers
+    // Step 1: Create a new AppUser record
     var user = new AppUser
     {
         UserName = employeeDto.Email,
         Email = employeeDto.Email,
         EmailConfirmed = false
     };
-
-
-// Create user and set password
-    var resultp = await _userManager.CreateAsync(user, employeeDto.PasswordHash);
-    if (!resultp.Succeeded)
-    {
-        return BadRequest(resultp.Errors);
-    }
-
- // Step 2: Generate an email confirmation token
-    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-    var confirmationLink = Url.Action(nameof(ConfirmEmail), "Employee", new { token, email = user.Email }, Request.Scheme);
-
-
-  // Step 4: Send confirmation and reset password emails
-    var emailBody = $"Please confirm your account by clicking this link: {confirmationLink}<br/>";
-                 
-
-    await _emailSender.SendEmailAsync(user.Email, "Confirm your email and set your password", emailBody);
-
-
 
     // Create user and set password
     var result = await _userManager.CreateAsync(user, employeeDto.PasswordHash);
@@ -81,7 +61,15 @@ public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto employeeD
         return BadRequest(result.Errors);
     }
 
-    // Step 2: Create an employee record
+    // Step 2: Generate an email confirmation token
+    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+    var confirmationLink = Url.Action(nameof(ConfirmEmail), "Employee", new { token, email = user.Email }, Request.Scheme);
+
+    // Step 3: Send confirmation email
+    var emailBody = $"Please confirm your account by clicking this link: {confirmationLink}<br/>";
+    await _emailSender.SendEmailAsync(user.Email, "Confirm your email and set your password", emailBody);
+
+    // Step 4: Create an employee record and link to the created AppUser
     var employee = new Employee
     {
         Name = employeeDto.Name,
@@ -100,16 +88,51 @@ public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto employeeD
         StartDate = employeeDto.StartDate,
         EndDate = employeeDto.EndDate,
         Url = employeeDto.Url,
-        AspNetUserId = user.Id // Link Employee to User
+        PasswordHash = employeeDto.PasswordHash,
+        AppUserId = user.Id // Link Employee to AppUser via AppUserId
     };
 
+    // Add the employee to the context
     _context.Employees.Add(employee);
     await _context.SaveChangesAsync();
 
-    return Ok(new { Message = "User created successfully." });
+    return Ok(new { Message = "User and employee created successfully." });
 }
 
 
+
+[HttpGet]
+public async Task<IActionResult> GetEmployees()
+{
+    var employees = await _context.Employees.ToListAsync();
+    
+    if (employees == null || !employees.Any())
+    {
+        return NotFound("No employees found.");
+    }
+
+    var employeeDtos = employees.Select(e => new EmployeeDto
+    {
+        Name = e.Name,
+        Surname = e.Surname,
+        Email = e.Email,
+        IdentityNumber = e.IdentityNumber,
+        PassportNumber = e.PassportNumber,
+        DateOfBirth = e.DateOfBirth,
+        Gender = e.Gender,
+        TaxNumber = e.TaxNumber,
+        MaritalStatus = e.MaritalStatus,
+        PhysicalAddress = e.PhysicalAddress,
+        PostalAddress = e.PostalAddress,
+        Salary = e.Salary,
+        ContractType = e.ContractType,
+        StartDate = e.StartDate,
+        EndDate = e.EndDate,
+        Url = e.Url
+    }).ToList();
+
+    return Ok(employeeDtos);
+}
 
     [HttpGet("ConfirmEmail")]
     public async Task<IActionResult> ConfirmEmail(string token, string email)

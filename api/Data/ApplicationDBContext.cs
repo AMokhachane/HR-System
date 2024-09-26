@@ -32,12 +32,15 @@ namespace api.Data
         {
             base.OnModelCreating(builder);
 
-            // Define the relationship between Employee and AppUser
-        builder.Entity<Employee>()
-            .HasOne(e => e.User)
-            .WithOne() // Assuming one-to-one relationship
-            .HasForeignKey<Employee>(e => e.AspNetUserId)
-            .IsRequired();
+                // Define the relationship between Employee and AppUser
+  builder.Entity<AppUser>()
+                .Property(u => u.Id)
+                .HasColumnName("AppUserId");
+
+                 builder.Entity<Employee>()
+                .HasOne(i => i.AppUser)
+                .WithMany(u => u.Employees)
+                .HasForeignKey(i => i.AppUserId);
 
 
 

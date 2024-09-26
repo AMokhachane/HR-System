@@ -27,10 +27,8 @@ public class Employee
     public string Url { get; set; }
     public string PasswordHash { get; set; }
 
-    public string AspNetUserId { get; set; }  // Foreign key
-
-    // Navigation property to AppUser
-    public AppUser User { get; set; }
+ public string AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
 }
 
 

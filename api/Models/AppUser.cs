@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace api.Models
 {
-    public class AppUser : IdentityUser
+   public class AppUser : IdentityUser
     {
-        
-      public ICollection<Employee> Employees { get; set; }
-
-        
+       public List<Employee> Employees { get; set; } = new List<Employee>();
+       
     }
 }

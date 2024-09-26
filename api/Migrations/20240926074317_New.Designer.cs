@@ -12,7 +12,7 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240925100305_New")]
+    [Migration("20240926074317_New")]
     partial class New
     {
         /// <inheritdoc />
@@ -54,13 +54,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f5b2f48f-2750-4426-9b2a-8992a85e5c76",
+                            Id = "210463b8-a189-41a4-a258-2b63be6b3dfc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "dd9cf622-1130-4d0a-9ac3-e2178a6d49e2",
+                            Id = "668787e6-159c-4e8b-ba6d-ef976b5a86c2",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -175,7 +175,8 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("AppUserId");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -278,9 +279,6 @@ namespace api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
                     b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AspNetUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -318,6 +316,10 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhysicalAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -347,9 +349,6 @@ namespace api.Migrations
                     b.HasKey("EmployeeId");
 
                     b.HasIndex("AppUserId");
-
-                    b.HasIndex("AspNetUserId")
-                        .IsUnique();
 
                     b.ToTable("Employees");
                 });
@@ -601,17 +600,13 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Employee", b =>
                 {
-                    b.HasOne("api.Models.AppUser", null)
+                    b.HasOne("api.Models.AppUser", "AppUser")
                         .WithMany("Employees")
-                        .HasForeignKey("AppUserId");
-
-                    b.HasOne("api.Models.AppUser", "User")
-                        .WithOne()
-                        .HasForeignKey("api.Models.Employee", "AspNetUserId")
+                        .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("api.Models.JobGrade", b =>

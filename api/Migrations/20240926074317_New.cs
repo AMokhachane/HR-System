@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstOne : Migration
+    public partial class New : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,7 +31,7 @@ namespace api.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -49,7 +49,7 @@ namespace api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.AppUserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -149,7 +149,7 @@ namespace api.Migrations
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "AppUserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -169,7 +169,7 @@ namespace api.Migrations
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "AppUserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -193,7 +193,7 @@ namespace api.Migrations
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "AppUserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -213,7 +213,7 @@ namespace api.Migrations
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "AppUserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -239,8 +239,8 @@ namespace api.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AspNetUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -249,12 +249,7 @@ namespace api.Migrations
                         name: "FK_Employees_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Employees_AspNetUsers_AspNetUserId",
-                        column: x => x.AspNetUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "AppUserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -363,8 +358,8 @@ namespace api.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "bf4cc8ea-3ca9-471c-a37a-a474a382045b", null, "Admin", "ADMIN" },
-                    { "d2bbc04b-9ed4-4ff1-a064-40f0bed6208f", null, "User", "USER" }
+                    { "210463b8-a189-41a4-a258-2b63be6b3dfc", null, "Admin", "ADMIN" },
+                    { "668787e6-159c-4e8b-ba6d-ef976b5a86c2", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -415,12 +410,6 @@ namespace api.Migrations
                 name: "IX_Employees_AppUserId",
                 table: "Employees",
                 column: "AppUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_AspNetUserId",
-                table: "Employees",
-                column: "AspNetUserId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobGrades_JobTitleId",
