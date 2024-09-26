@@ -1,9 +1,9 @@
 .employeeListContainer {
   padding: 20px;
+  margin-left: 600px;
 }
 
 .employeeTable {
-  width: 100%;
   border-collapse: collapse;
 }
 

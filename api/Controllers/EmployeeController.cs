@@ -134,6 +134,40 @@ public async Task<IActionResult> GetEmployees()
     return Ok(employeeDtos);
 }
 
+[HttpGet("{id}")]
+public async Task<IActionResult> GetEmployeeById(int id)
+{
+    var employee = await _context.Employees
+        .Where(e => e.EmployeeId == id)
+        .Select(e => new EmployeeDto
+        {
+            Name = e.Name,
+            Surname = e.Surname,
+            Email = e.Email,
+            IdentityNumber = e.IdentityNumber,
+            PassportNumber = e.PassportNumber,
+            DateOfBirth = e.DateOfBirth,
+            Gender = e.Gender,
+            TaxNumber = e.TaxNumber,
+            MaritalStatus = e.MaritalStatus,
+            PhysicalAddress = e.PhysicalAddress,
+            PostalAddress = e.PostalAddress,
+            Salary = e.Salary,
+            ContractType = e.ContractType,
+            StartDate = e.StartDate,
+            EndDate = e.EndDate,
+            Url = e.Url
+        })
+        .FirstOrDefaultAsync();
+
+    if (employee == null)
+    {
+        return NotFound($"Employee with ID {id} not found.");
+    }
+
+    return Ok(employee);
+}
+
     [HttpGet("ConfirmEmail")]
     public async Task<IActionResult> ConfirmEmail(string token, string email)
     {

@@ -7,6 +7,7 @@ import ViewProfile from "./ViewProfile";
 import Login from './Login';
 import Password from './Password';
 import Email from './Email';
+import EmployeeDetails from './EmployeeDetails'; // Import the new EmployeeDetails component
 
 
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/view-profile" element={<ViewProfile />} />
         <Route path="/add-employee" element={<AddEmployee />} />
         <Route path="/email" element={<Email/>} />
+        <Route path="/employee/:id" component={EmployeeDetails} /> {/* Dynamic route for employee details */}
         
       </Routes>
     </Router>
