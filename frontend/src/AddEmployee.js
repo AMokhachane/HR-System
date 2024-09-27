@@ -36,7 +36,7 @@ const AddEmployee = () => {
     if (imageSelected) {
       const uploadFormData = new FormData();
       uploadFormData.append("file", imageSelected);
-      uploadFormData.append("upload_preset", "zmp53t7t");
+      uploadFormData.append("upload_preset", "wywylbfz"); // Use your Cloudinary upload preset
 
       axios
         .post(
@@ -53,26 +53,18 @@ const AddEmployee = () => {
           }));
 
           // Step 3: Post formData to your backend API after image upload
-          axios.post("http://localhost:5239/api/employee", formData)
-          .then(response => {
-            console.log("Data successfully sent to backend:", response.data);
-          })
-          .catch(error => {
-            console.error("Error sending data:", error);
-          })
-            .then((response) => {
-              console.log("Data successfully sent to backend:", response.data);
-              setImageUrls((prev) => [...prev, imageUrl]); // Optional: update imageUrls for display
-            })
-            .catch((error) => {
-              console.error("Error sending data:", error);
-            })
-            .finally(() => {
-              setLoading(false); // Reset loading state
-            });
+          return axios.post("http://localhost:5239/api/employee", {
+            ...formData,
+            url: imageUrl, // Ensure the URL is being sent
+          });
+        })
+        .then((response) => {
+          console.log("Data successfully sent to backend:", response.data);
+          setImageUrls((prev) => [...prev, formData.url]); // Optionally update imageUrls
+          setLoading(false);
         })
         .catch((error) => {
-          console.error("Error uploading image:", error);
+          console.error("Error uploading image or sending data:", error);
           setLoading(false); // Reset loading state even if there's an error
         });
     } else {
@@ -81,11 +73,10 @@ const AddEmployee = () => {
         .post("http://localhost:5239/api/employee", formData)
         .then((response) => {
           console.log("Data successfully sent to backend:", response.data);
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error sending data:", error);
-        })
-        .finally(() => {
           setLoading(false); // Reset loading state
         });
     }
@@ -353,19 +344,19 @@ const AddEmployee = () => {
           </div>
 
 
-          {/* File upload */}
-          <div className={styles.uploadContainer}>
-    <label htmlFor="fileUpload" className={styles.customFileUpload}>
-        <i className="fas fa-cloud-upload-alt"></i> {/* Font Awesome Cloud Icon */}
-        <span>Upload Image</span>
-    </label>
-    <input
-        type="file"
-        id="fileUpload"
-        onChange={(event) => setImageSelected(event.target.files[0])}
-        className={styles.fileInput}
-    />
-</div>
+         {/* File upload */}
+         <div className={styles.uploadContainer}>
+            <label htmlFor="fileUpload" className={styles.customFileUpload}>
+              <i className="fas fa-cloud-upload-alt"></i> {/* Font Awesome Cloud Icon */}
+              <span>Upload Image</span>
+            </label>
+            <input
+              type="file"
+              id="fileUpload"
+              onChange={(event) => setImageSelected(event.target.files[0])}
+              className={styles.fileInput}
+            />
+          </div>
 
           {/* Submit button */}
           <button

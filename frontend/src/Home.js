@@ -6,7 +6,6 @@ import axios from 'axios';
 import { Image } from "cloudinary-react";
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
-import { FaSearch } from 'react-icons/fa'; // You can remove this import if not used
 
 const Home = () => {
   const [employees, setEmployees] = useState([]);
@@ -34,6 +33,8 @@ const Home = () => {
   const filteredEmployees = employees.filter(employee =>
     `${employee.name} ${employee.surname}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  
 
   return (
     <div className={HomeCSS.container}>
