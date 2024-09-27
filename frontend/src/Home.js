@@ -4,20 +4,21 @@ import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import HomeCSS from './Home.module.css'; // Use the CSS module
 import Sidebar from './Sidebar';
 import axios from 'axios';
-import { Image } from 'cloudinary-react';
-import { Link } from 'react-router-dom';
+import { Image } from "cloudinary-react";
+import { Link } from 'react-router-dom'; // Add this import
 
 const Home = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState([]);
   const [imageUrls, setImageUrls] = useState([]); // Assuming this is still needed
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Fetch employee data when the component mounts
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get('http://localhost:5239/api/Employee');
+        const response = await axios.get("http://localhost:5239/api/Employee");
         setEmployees(response.data);
       } catch (err) {
         setError(err.response?.data?.message || 'An error occurred while fetching employees.');
@@ -28,61 +29,54 @@ const Home = () => {
     fetchEmployees();
   }, []);
 
-  const filteredEmployees = employees.filter(
-    (employee) =>
-      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.surname.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
     <div className={HomeCSS.container}>
-      <div className={HomeCSS.sidebarContainer}>
-        <Sidebar />
+      <div className={HomeCSS.leftSide}>
+        <div className={HomeCSS.sidebar}>
+          <Sidebar />
+        </div>
       </div>
 
-      <div className={HomeCSS.mainContent}>
-        <div className={HomeCSS.header}>
-          <InputGroup className={HomeCSS.searchBar}>
-            <FormControl
-              placeholder="Search employees..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <InputGroup.Text>
-              <FaSearch />
-            </InputGroup.Text>
-          </InputGroup>
-
-          <div className={HomeCSS.userInfo}>
-            <FaUserCircle size={30} />
-            <span className={HomeCSS.userName}>Team Temu</span>
-          </div>
-        </div>
-
+      <div className={HomeCSS.rightSide}>
         {loading ? (
           <div>Loading...</div>
-        ) : error ? (
+        ) : error.length ? (
           <div className={HomeCSS.error}>{error}</div>
         ) : (
-          <div className={HomeCSS.employeeGrid}>
-            {filteredEmployees.map((employee) => (
-              <Card key={employee.identityNumber} className={HomeCSS.employeeCard}>
-                <div className={HomeCSS.cardContent}>
+          <div className={HomeCSS.employeeListContainer}>
+            <div className={HomeCSS.employeeCardContainer}>
+              {employees.map((employee) => (
+                <div key={employee.identityNumber} className={HomeCSS.employeeCard}>
                   <img
-                    src={employee.url || 'placeholder-image-url'} // Placeholder if no image is available
-                    alt={`${employee.name} ${employee.surname}`}
+                    src={employee.url} // Assuming pictureUrl is a property in employee object
+                    alt={`${employee.name} ${employee.surname}`}  
                     className={HomeCSS.employeeImage}
                   />
-                  <div className={HomeCSS.employeeDetails}>
-                    <h5>{`${employee.name} ${employee.surname}`}</h5>
-                    <p>{employee.jobTitle}</p>
-                    <p>{employee.phoneNumber}</p>
+                  <div className={HomeCSS.employeeInfo}>
+                    <h2>
+                      <Link to={`/employee/${employee.employeeId}`}> {/* Fixed URL template string */}
+                        {employee.name} {employee.surname}
+                      </Link>
+                    </h2>
+                    <p>Email: {employee.email}</p>
+                    <p>Gender: {employee.gender}</p>
                   </div>
                 </div>
-              </Card>
-            ))}
+              ))}
+            </div>
           </div>
         )}
+
+        <div className={HomeCSS.imageContainer}>
+          {imageUrls.map((url, index) => (
+            <Image
+              key={index}
+              className={HomeCSS.uploadedImage}
+              cloudName="drgxphf5l"
+              publicId={url}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
