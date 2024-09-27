@@ -111,7 +111,7 @@ public async Task<IActionResult> GetEmployees()
     }
 
     var employeeDtos = employees.Select(e => new EmployeeDto
-    {
+    {   EmployeeId = e.EmployeeId,
         Name = e.Name,
         Surname = e.Surname,
         Email = e.Email,
@@ -136,11 +136,9 @@ public async Task<IActionResult> GetEmployees()
 [HttpGet("{id}")]
 public async Task<IActionResult> GetEmployeeById(int id)
 {
-     // Increment the ID by 1 to get the next employee
-    var employeeIdToFetch = id + 1;
-
+    // Fetch employee by the exact ID passed in the request
     var employee = await _context.Employees
-        .Where(e => e.EmployeeId == employeeIdToFetch)
+        .Where(e => e.EmployeeId == id)
         .Select(e => new EmployeeDto
         {
             Name = e.Name,
@@ -164,7 +162,7 @@ public async Task<IActionResult> GetEmployeeById(int id)
 
     if (employee == null)
     {
-        return NotFound($"Employee with ID {employeeIdToFetch} not found.");
+        return NotFound($"Employee with ID {id} not found.");
     }
 
     return Ok(employee);
