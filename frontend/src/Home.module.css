@@ -1,18 +1,121 @@
-.employeeListContainer {
+.container {
+  display: flex;
+  height: 100vh;
+  background-color: #EFEBEB;
+  margin-left: 30%;
+}
+
+.employeeCardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px; 
+  margin-left: 90px;
+}
+
+.employeeCard {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  text-align: center; /* Center text */
+ 
+  padding: 16px; /* Add padding for spacing */
+  margin: 10px; /* Space between cards */
+  border-radius: 8px; /* Optional: rounded corners */
+  background-color: #D9D9D9; /* Optional: background color */
+}
+
+.employeeImage {
+  width: 95px;   /* Set width to 95 pixels */
+  height: 95px;  /* Set height to 95 pixels */
+  object-fit: cover; /* Ensure the image covers the box without distortion */
+  border-radius: 50%; /* Optional: for rounded images */
+  margin-bottom: 10px; /* Space between image and text */
+}
+
+.employeeInfo {
+  padding: 10px; /* space inside the card */
+}
+
+.employeeInfo h2 {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.employeeInfo p {
+  margin: 5px 0; /* space between paragraphs */
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.userIcon {
+  margin-left: 20px;
+  cursor: pointer; /* Makes the icon interactive */
+}
+
+.mainContent {
+  flex-grow: 1;
   padding: 20px;
-  margin-left: 600px;
+  background-color: #f5f5f5;
 }
 
-.employeeTable {
-  border-collapse: collapse;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.employeeTable th, .employeeTable td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+.searchBar {
+  width: 300px;
 }
 
-.employeeTable th {
-  background-color: #f2f2f2;
+.userInfo {
+  display: flex;
+  align-items: center;
+}
+
+.userName {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.employeeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.employeeCard {
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 20px;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.employeeImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+.employeeDetails h5 {
+  margin-bottom: 5px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.employeeDetails p {
+  margin: 0;
+  color: #888;
 }

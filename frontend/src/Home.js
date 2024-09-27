@@ -4,20 +4,20 @@ import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import HomeCSS from './Home.module.css'; // Use the CSS module
 import Sidebar from './Sidebar';
 import axios from 'axios';
-import { Image } from "cloudinary-react";
-import { Link } from 'react-router-dom'; // Add this import
+import { Image } from 'cloudinary-react';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState([]);
+  const [error, setError] = useState('');
   const [imageUrls, setImageUrls] = useState([]); // Assuming this is still needed
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Fetch employee data when the component mounts
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get("http://localhost:5239/api/Employee");
+        const response = await axios.get('http://localhost:5239/api/Employee');
         setEmployees(response.data);
       } catch (err) {
         setError(err.response?.data?.message || 'An error occurred while fetching employees.');
@@ -28,66 +28,61 @@ const Home = () => {
     fetchEmployees();
   }, []);
 
+  const filteredEmployees = employees.filter(
+    (employee) =>
+      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.surname.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className={HomeCSS.container}>
-      <div className={HomeCSS.leftSide}>
-        <div className={HomeCSS.sidebar}>
-          <Sidebar />
-        </div>
+      <div className={HomeCSS.sidebarContainer}>
+        <Sidebar />
       </div>
 
-      <div className={HomeCSS.rightSide}>
+      <div className={HomeCSS.mainContent}>
+        <div className={HomeCSS.header}>
+          <InputGroup className={HomeCSS.searchBar}>
+            <FormControl
+              placeholder="Search employees..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <InputGroup.Text>
+              <FaSearch />
+            </InputGroup.Text>
+          </InputGroup>
+
+          <div className={HomeCSS.userInfo}>
+            <FaUserCircle size={30} />
+            <span className={HomeCSS.userName}>Team Temu</span>
+          </div>
+        </div>
+
         {loading ? (
           <div>Loading...</div>
-        ) : error.length ? (
+        ) : error ? (
           <div className={HomeCSS.error}>{error}</div>
         ) : (
-          <div className={HomeCSS.employeeListContainer}>
-            <h1>Employee List</h1>
-            <table className={HomeCSS.employeeTable}>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Surname</th>
-                  <th>Email</th>
-                  <th>Identity Number</th>
-                  <th>Passport Number</th>
-                  <th>Date of Birth</th>
-                  <th>Gender</th>
-                  <th>Salary</th>
-                  <th>Contract Type</th>
-                </tr>
-              </thead>
-              <tbody>
-                {employees.map((employee) => (
-                  <tr key={employee.identityNumber}> {/* Assuming Identity Number is unique */}
-                  <td><Link to={`/employee/${employee.employeeId}`}>{employee.name}</Link></td> {/* Link to employee details */}
-                    
-                    <td>{employee.surname}</td>
-                    <td>{employee.email}</td>
-                    <td>{employee.identityNumber}</td>
-                    <td>{employee.passportNumber}</td>
-                    <td>{new Date(employee.dateOfBirth).toLocaleDateString()}</td>
-                    <td>{employee.gender}</td>
-                    <td>{employee.salary}</td>
-                    <td>{employee.contractType}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className={HomeCSS.employeeGrid}>
+            {filteredEmployees.map((employee) => (
+              <Card key={employee.identityNumber} className={HomeCSS.employeeCard}>
+                <div className={HomeCSS.cardContent}>
+                  <img
+                    src={employee.url || 'placeholder-image-url'} // Placeholder if no image is available
+                    alt={`${employee.name} ${employee.surname}`}
+                    className={HomeCSS.employeeImage}
+                  />
+                  <div className={HomeCSS.employeeDetails}>
+                    <h5>{`${employee.name} ${employee.surname}`}</h5>
+                    <p>{employee.jobTitle}</p>
+                    <p>{employee.phoneNumber}</p>
+                  </div>
+                </div>
+              </Card>
+            ))}
           </div>
         )}
-
-        <div className={HomeCSS.imageContainer}>
-          {imageUrls.map((url, index) => (
-            <Image
-              key={index}
-              className={HomeCSS.uploadedImage}
-              cloudName="drgxphf5l"
-              publicId={url}
-            />
-          ))}
-        </div>
       </div>
     </div>
   );

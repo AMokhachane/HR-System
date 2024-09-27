@@ -43,7 +43,7 @@ public class EmployeeController : ControllerBase
     }
 
 
-    [HttpPost]
+       [HttpPost]
 public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto employeeDto)
 {
     // Step 1: Create a new AppUser record
@@ -100,7 +100,6 @@ public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto employeeD
 }
 
 
-
 [HttpGet]
 public async Task<IActionResult> GetEmployees()
 {
@@ -137,8 +136,11 @@ public async Task<IActionResult> GetEmployees()
 [HttpGet("{id}")]
 public async Task<IActionResult> GetEmployeeById(int id)
 {
+     // Increment the ID by 1 to get the next employee
+    var employeeIdToFetch = id + 1;
+
     var employee = await _context.Employees
-        .Where(e => e.EmployeeId == id)
+        .Where(e => e.EmployeeId == employeeIdToFetch)
         .Select(e => new EmployeeDto
         {
             Name = e.Name,
@@ -162,7 +164,7 @@ public async Task<IActionResult> GetEmployeeById(int id)
 
     if (employee == null)
     {
-        return NotFound($"Employee with ID {id} not found.");
+        return NotFound($"Employee with ID {employeeIdToFetch} not found.");
     }
 
     return Ok(employee);

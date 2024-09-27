@@ -10,18 +10,21 @@ const EmployeeDetails = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchEmployeeDetails = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5239/api/employee/${id}`);
-        setEmployee(response.data);
-      } catch (err) {
-        setError(err.response?.data?.message || 'An error occurred while fetching employee details.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEmployeeDetails();
+	const fetchEmployeeDetails = async () => {
+	  try {
+		console.log(`Fetching employee details for ID: ${id}`); // Log the ID being fetched
+		const response = await axios.get(`http://localhost:5239/api/employee/${id}`);
+		console.log('Response:', response.data); // Log the API response
+		setEmployee(response.data);
+	  } catch (err) {
+		console.error(err); // Log the error for debugging
+		setError(err.response?.data?.message || 'An error occurred while fetching employee details.');
+	  } finally {
+		setLoading(false);
+	  }
+	};
+  
+	fetchEmployeeDetails();
   }, [id]);
 
   if (loading) return <div>Loading...</div>;

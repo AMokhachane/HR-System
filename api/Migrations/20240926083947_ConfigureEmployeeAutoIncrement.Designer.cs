@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240926074317_New")]
-    partial class New
+    [Migration("20240926083947_ConfigureEmployeeAutoIncrement")]
+    partial class ConfigureEmployeeAutoIncrement
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "210463b8-a189-41a4-a258-2b63be6b3dfc",
+                            Id = "3b9c2cc1-7f9d-48ae-9271-03978a060753",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "668787e6-159c-4e8b-ba6d-ef976b5a86c2",
+                            Id = "d9904eea-a0a1-4392-92bf-27ed996581c1",
                             Name = "User",
                             NormalizedName = "USER"
                         });

@@ -32,26 +32,31 @@ namespace api.Data
         {
             base.OnModelCreating(builder);
 
-                // Define the relationship between Employee and AppUser
-  builder.Entity<AppUser>()
-                .Property(u => u.Id)
-                .HasColumnName("AppUserId");
+    // Define the relationship between Employee and AppUser
+    builder.Entity<AppUser>()
+        .Property(u => u.Id)
+        .HasColumnName("AppUserId");
 
-                 builder.Entity<Employee>()
-                .HasOne(i => i.AppUser)
-                .WithMany(u => u.Employees)
-                .HasForeignKey(i => i.AppUserId);
+    builder.Entity<Employee>()
+        .HasKey(e => e.EmployeeId); // Ensure EmployeeId is the primary key
 
+    builder.Entity<Employee>()
+        .Property(e => e.EmployeeId)
+        .ValueGeneratedOnAdd(); // Set to auto-generate
 
+    builder.Entity<Employee>()
+        .HasOne(i => i.AppUser)
+        .WithMany(u => u.Employees)
+        .HasForeignKey(i => i.AppUserId);
 
-            // Seed roles
-            List<IdentityRole> roles = new List<IdentityRole>
-            {
-                new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
-                new IdentityRole { Name = "User", NormalizedName = "USER" }
-            };
-            
-            builder.Entity<IdentityRole>().HasData(roles);
-        }
+    // Seed roles
+    List<IdentityRole> roles = new List<IdentityRole>
+    {
+        new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
+        new IdentityRole { Name = "User", NormalizedName = "USER" }
+    };
+    
+    builder.Entity<IdentityRole>().HasData(roles);
+}
     }
 }
