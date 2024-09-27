@@ -137,3 +137,9 @@
     top: 0;
     cursor: pointer;
 }
+
+.successMessage {
+    color: green; /* Or any color you prefer */
+    margin-top: 10px;
+    font-weight: bold;
+  }

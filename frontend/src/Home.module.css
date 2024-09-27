@@ -119,3 +119,21 @@
   margin: 0;
   color: #888;
 }
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Search bar container */
+.search-bar {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}

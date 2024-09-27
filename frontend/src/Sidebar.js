@@ -18,11 +18,6 @@ export const Sidebar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/view-profile">
-            <FaUser className={SidebarCSS.icon} /> View Profile
-          </Link>
-        </li>
-        <li>
           <Link to="/add-employee">
             <FaUserPlus className={SidebarCSS.icon} /> Add Employee
           </Link>
