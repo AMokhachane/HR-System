@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
-import { FaSearch } from 'react-icons/fa';
+import { Container, Row, Col } from 'react-bootstrap';
 import HomeCSS from './Home.module.css'; // Use the CSS module
 import Sidebar from './Sidebar';
 import axios from 'axios';
 import { Image } from "cloudinary-react";
 import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
+import { FaSearch } from 'react-icons/fa'; // You can remove this import if not used
 
 const Home = () => {
   const [employees, setEmployees] = useState([]);
@@ -41,36 +42,23 @@ const Home = () => {
           <Sidebar />
         </div>
       </div>
-
+  
       <div className={HomeCSS.rightSide}>
+        <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         {loading ? (
           <div>Loading...</div>
         ) : error ? (
           <div className={HomeCSS.error}>{error}</div>
         ) : (
           <Container>
-            {/* Search Bar */}
-            <InputGroup className={`mb-4 ${HomeCSS.inputBox}`}>
-              <InputGroup.Text>
-                <FaSearch className={HomeCSS.icon} />
-              </InputGroup.Text>
-              <FormControl
-                type="text"
-                placeholder="Search for..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className={HomeCSS.searchBar}
-              />
-            </InputGroup>
-
             {/* Employee List */}
             <div className={HomeCSS.employeeListContainer}>
-              <Row>
+              <Row className={HomeCSS.employeeCardContainer}> {/* Added class here */}
                 {filteredEmployees.map((employee) => (
-                  <Col key={employee.identityNumber} md={3}>
+                  <Col key={employee.identityNumber} md={3} className={HomeCSS.employeeCol}> {/* Optional class for styling */}
                     <div className={HomeCSS.employeeCard}>
                       <img
-                        src={employee.url} // Assuming pictureUrl is a property in employee object
+                        src={employee.url}
                         alt={`${employee.name} ${employee.surname}`}
                         className={HomeCSS.employeeImage}
                       />
@@ -90,7 +78,7 @@ const Home = () => {
             </div>
           </Container>
         )}
-
+  
         {/* Images Section */}
         <div className={HomeCSS.imageContainer}>
           {imageUrls.map((url, index) => (

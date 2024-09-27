@@ -5,86 +5,24 @@
   margin-left: 30%;
 }
 
+.leftSide {
+  width: 30px; /* Adjust width as needed */
+}
+
+.rightSide {
+ margin-top: 60px;
+}
+
 .employeeCardContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px; 
-  margin-left: 90px;
+  display: flex; /* Use Flexbox for the card layout */
+  flex-wrap: wrap; /* Allow cards to wrap to the next line */
+  justify-content: space-between; /* Space out the cards */
+  gap: 30px; /* Space between cards */
+  margin: 0 -15px; /* Adjust for Bootstrap padding */
 }
 
-.employeeCard {
-  display: flex;
-  flex-direction: column; /* Stack items vertically */
-  align-items: center; /* Center items horizontally */
-  text-align: center; /* Center text */
- 
-  padding: 16px; /* Add padding for spacing */
-  margin: 10px; /* Space between cards */
-  border-radius: 8px; /* Optional: rounded corners */
-  background-color: #D9D9D9; /* Optional: background color */
-}
-
-.employeeImage {
-  width: 95px;   /* Set width to 95 pixels */
-  height: 95px;  /* Set height to 95 pixels */
-  object-fit: cover; /* Ensure the image covers the box without distortion */
-  border-radius: 50%; /* Optional: for rounded images */
-  margin-bottom: 10px; /* Space between image and text */
-}
-
-.employeeInfo {
-  padding: 10px; /* space inside the card */
-}
-
-.employeeInfo h2 {
-  font-size: 1.2em;
-  margin: 0;
-}
-
-.employeeInfo p {
-  margin: 5px 0; /* space between paragraphs */
-}
-
-.navbar {
-  margin-bottom: 20px;
-}
-
-.userIcon {
-  margin-left: 20px;
-  cursor: pointer; /* Makes the icon interactive */
-}
-
-.mainContent {
-  flex-grow: 1;
-  padding: 20px;
-  background-color: #f5f5f5;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.searchBar {
-  width: 300px;
-}
-
-.userInfo {
-  display: flex;
-  align-items: center;
-}
-
-.userName {
-  margin-left: 10px;
-  font-weight: bold;
-}
-
-.employeeGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+.employeeCol {
+  flex: 1 1 200px; /* Allow the columns to flex */
 }
 
 .employeeCard {
@@ -94,30 +32,28 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   padding: 20px;
-}
-
-.cardContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-bottom: 20px; /* Space between rows */
 }
 
 .employeeImage {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 15px;
+  width: 95px; /* Set width to 95 pixels */
+  height: 95px; /* Set height to 95 pixels */
+  object-fit: cover; /* Ensure the image covers the box without distortion */
+  border-radius: 50%; /* Rounded images */
+  margin-bottom: 10px; /* Space between image and text */
 }
 
-.employeeDetails h5 {
-  margin-bottom: 5px;
-  font-size: 16px;
-  font-weight: bold;
+.employeeInfo {
+  padding: 10px; /* Space inside the card */
 }
 
-.employeeDetails p {
+.employeeInfo h2 {
+  font-size: 1.2em;
   margin: 0;
-  color: #888;
+}
+
+.employeeInfo p {
+  margin: 5px 0; /* Space between paragraphs */
 }
 
 .navbar {
@@ -129,11 +65,4 @@
   border-bottom: 1px solid #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-}
-
-/* Search bar container */
-.search-bar {
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
 }

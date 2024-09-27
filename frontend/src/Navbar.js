@@ -1,39 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Import Link for navigation
-import NavCSS from './Navbar.module.css'; // Ensure this CSS file is set up
+import styles from './Navbar.module.css'; // Assuming you have a CSS module for styling
+import { FaHome, FaUser, FaUserCircle, FaSearch } from 'react-icons/fa'; // Import icons
 
-export const Navbar = () => {
+const Navbar = ({ currentUser, searchTerm, setSearchTerm }) => {
   return (
-    <nav className={NavCSS.navbar}>
-      <ul className={NavCSS.navList}>
-        {/* Profile Info Link */}
-        <li className={NavCSS.navItem}>
-          <Link to="/profile" className={NavCSS.navLink}>
-            Profile Info
-          </Link>
-        </li>
-
-        {/* Banking Details Link */}
-        <li className={NavCSS.navItem}>
-          <Link to="/banking" className={NavCSS.navLink}>
-            Banking Details
-          </Link>
-        </li>
-
-        {/* Qualification Link */}
-        <li className={NavCSS.navItem}>
-          <Link to="/qualification" className={NavCSS.navLink}>
-            Qualification
-          </Link>
-        </li>
-
-        {/* Job Title Link */}
-        <li className={NavCSS.navItem}>
-          <Link to="/jobtitle" className={NavCSS.navLink}>
-            Job Title
-          </Link>
-        </li>
-      </ul>
+    <nav className={styles.navbar}>
+      <div className={styles.navContent}>
+      <span className={styles.homeLink}>
+          <FaHome className={styles.icon} /> Home
+        </span>
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="Search for..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput} // Add your CSS class for styling
+          />
+          <FaSearch className={styles.searchIcon} /> {/* Search icon */}
+        </div>
+        <div className={styles.userInfo}>
+          <span className={styles.userPlaceholder}>
+          <FaUser className={styles.icon} /> Welcome, Kim Hyan
+        </span>
+        </div>
+      </div>
     </nav>
   );
 };
