@@ -26,7 +26,8 @@
   
   
   .icon {
-    font-size: 1.5rem;             /* Increase the icon size (adjust as needed) */
+    font-size: 1.5rem;
+    margin-left: 15px;             /* Increase the icon size (adjust as needed) */
     margin-right: 5px;               /* Remove any margin to eliminate space */
     color: #333;                   /* Change color if needed */
 }

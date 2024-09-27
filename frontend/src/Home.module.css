@@ -23,6 +23,8 @@
 
 .employeeCol {
   flex: 1 1 200px; /* Allow the columns to flex */
+  display: flex; /* Ensure the column itself uses flex */
+  justify-content: center; /* Center the card in the column */
 }
 
 .employeeCard {
@@ -33,11 +35,16 @@
   text-align: center;
   padding: 20px;
   margin-bottom: 20px; /* Space between rows */
+  width: 200px; /* Fixed width for consistency */
+  height: 250px; /* Fixed height for consistency */
+  display: flex; /* Make card a flex container */
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center children horizontally */
 }
 
 .employeeImage {
-  width: 95px; /* Set width to 95 pixels */
-  height: 95px; /* Set height to 95 pixels */
+  width: 100px; /* Set width to 95 pixels */
+  height: 150px; /* Set height to 95 pixels */
   object-fit: cover; /* Ensure the image covers the box without distortion */
   border-radius: 50%; /* Rounded images */
   margin-bottom: 10px; /* Space between image and text */
@@ -45,6 +52,11 @@
 
 .employeeInfo {
   padding: 10px; /* Space inside the card */
+  flex-grow: 1; /* Allow info to expand to fill remaining space */
+  display: flex; /* Make it a flex container */
+  flex-direction: column; /* Stack info elements */
+  justify-content: center; /* Center content vertically */
+  text-align: center; /* Center the text */
 }
 
 .employeeInfo h2 {

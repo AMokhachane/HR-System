@@ -56,7 +56,7 @@ const Home = () => {
             <div className={HomeCSS.employeeListContainer}>
               <Row className={HomeCSS.employeeCardContainer}> {/* Added class here */}
                 {filteredEmployees.map((employee) => (
-                  <Col key={employee.identityNumber} md={3} className={HomeCSS.employeeCol}> {/* Optional class for styling */}
+                   <Col key={employee.identityNumber} md={3} sm={6} xs={12} className={HomeCSS.employeeCol}>
                     <div className={HomeCSS.employeeCard}>
                       <img
                         src={employee.url}
