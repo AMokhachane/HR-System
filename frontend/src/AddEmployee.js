@@ -85,10 +85,35 @@ const AddEmployee = () => {
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  
+    if (name === "identityNumber" && value.length === 13) {
+      const year = parseInt(value.substring(0, 2), 10);
+      const month = parseInt(value.substring(2, 4), 10);
+      const day = parseInt(value.substring(4, 6), 10);
+      const genderCode = parseInt(value.substring(6, 10), 10);
+  
+      // Determine the full year (assuming IDs starting with "00" and later refer to 2000s)
+      const currentYear = new Date().getFullYear() % 100;
+      const fullYear = year <= currentYear ? 2000 + year : 1900 + year;
+  
+      // Format the date for the date input field
+      const dateOfBirth = `${fullYear}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+  
+      // Determine gender based on genderCode
+      const gender = genderCode < 5000 ? "Female" : "Male";
+  
+      setFormData({
+        ...formData,
+        identityNumber: value,
+        dateOfBirth,
+        gender,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   return (
@@ -186,12 +211,13 @@ const AddEmployee = () => {
                 Date Of Birth
               </label>
               <input
-                type="date"
-                name="dateOfBirth"
-                value={formData.dateOfBirth}
-                onChange={handleInputChange}
-                className={styles.inputField}
-              />
+  type="date"
+  name="dateOfBirth"
+  value={formData.dateOfBirth}
+  onChange={handleInputChange}
+  className={styles.inputField}
+  readOnly
+/>
             </div>
           </div>
 
