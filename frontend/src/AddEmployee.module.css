@@ -143,3 +143,10 @@
     margin-top: 10px;
     font-weight: bold;
   }
+
+  .errorMessage {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: -10px; /* Adjust margin as needed */
+    margin-bottom: 10px; /* Space between error and input */
+  }
