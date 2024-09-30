@@ -1,11 +1,22 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .parentContainer {
     display: flex;
-    height: 100vh;
+    height: 100vh; /* Full viewport height */
+    width: 100%;
     background-color: #EFEBEB;
+    position: relative; /* Allows positioning of child elements if needed */
+    overflow: auto; /* Allows scrolling for content inside the container */
 }
 
 .leftSide {
-    width: 30%;
+    width: 20%;
     background-color: #363673;
     display: flex;
     align-items: center;
@@ -15,12 +26,13 @@
 .box {
     margin-left: 20px;
     padding: 20px;
-    width: 65%;
-    height: 76%;
+    width: 75%;
     margin-top: 40px;
     background-color: #D9D9D9;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    min-height: 90px; /* Optional: set a minimum height */
+    height: 780px; /* Allows the height to adjust based on content */
 }
 
 .label {
@@ -74,7 +86,7 @@
 }
 
 .uploadButton {
-    background-color: #2B4F63;
+    background: linear-gradient(135deg, #6D83F2, #2B4F63);
     color: white;
     padding: 10px 15px;
     border: none;
@@ -83,8 +95,8 @@
     transition: background-color 0.3s;
     margin-top: 15px; /* Adjusts spacing */
     width: 155px;
-    margin-top: -35px;
-    margin-left: 950px;
+    margin-top: 40px;
+    margin-left: 1300px;
 }
 
 .uploadButton:hover {
@@ -116,16 +128,22 @@
     align-items: center;
     width: 250px;
     height: 100px;
-    background-color: #D9D9D9;
-
-    color: black;
-    border-radius: 5px;
+    background: linear-gradient(135deg, #6D83F2, #2B4F63); /* Gradient background */
+    color: white;
+    border-radius: 8px; /* Slightly more rounded corners */
     cursor: pointer;
     font-size: 18px;
     text-align: center;
     gap: 10px; /* Space between icon and text */
-    margin-left: 400px;
+    margin-left: 550px;
     margin-top: 40px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adds a soft shadow */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
+}
+
+.customFileUpload:hover {
+    transform: translateY(-2px); /* Slight "lift" effect on hover */
+    background: linear-gradient(135deg, #4E60A6, #6D83F2); /* Change gradient on hover */
 }
 
 .fileInput {
@@ -136,6 +154,14 @@
     left: 0;
     top: 0;
     cursor: pointer;
+}
+
+.customFileUpload i {
+    font-size: 24px; /* Adjust icon size */
+}
+
+.customFileUpload span {
+    font-weight: bold; /* Make text bold */
 }
 
 .successMessage {

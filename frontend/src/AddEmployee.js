@@ -3,6 +3,8 @@ import axios from "axios";
 import { Image } from "cloudinary-react";
 import styles from "./AddEmployee.module.css";
 import Sidebar from "./Sidebar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 
 const AddEmployee = () => {
   const [imageSelected, setImageSelected] = useState("");
@@ -25,14 +27,14 @@ const AddEmployee = () => {
     contractType: "",
     startDate: "",
     endDate: "",
-    url: "", // Adding a field for the image URL
+    url: "",
     passwordHash: "",
   });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true while image is uploading
+    setLoading(true);
 
     const errors = [];
 
@@ -56,17 +58,16 @@ const AddEmployee = () => {
 
     if (Object.keys(errors).length > 0) {
       setLoading(false);
-      setErrorMessages(errors); // Set field-specific error messages
+      setErrorMessages(errors);
       return;
     }
 
-    setErrorMessages([]); // Clear previous error messages
+    setErrorMessages([]);
 
-    // Step 1: Upload image to Cloudinary
     if (imageSelected) {
       const uploadFormData = new FormData();
       uploadFormData.append("file", imageSelected);
-      uploadFormData.append("upload_preset", "wywylbfz"); // Use your Cloudinary upload preset
+      uploadFormData.append("upload_preset", "wywylbfz");
 
       axios
         .post(
@@ -76,25 +77,22 @@ const AddEmployee = () => {
         .then((response) => {
           const imageUrl = response.data.secure_url;
 
-          // Step 2: Update formData with the uploaded image URL
           setFormData((prevData) => ({
             ...prevData,
             url: imageUrl,
           }));
 
-          // Step 3: Post formData to your backend API after image upload
           return axios.post("http://localhost:5239/api/employee", {
             ...formData,
-            url: imageUrl, // Ensure the URL is being sent
+            url: imageUrl,
           });
         })
         .then((response) => {
           console.log("Data successfully sent to backend:", response.data);
-          setImageUrls((prev) => [...prev, formData.url]); // Optionally update imageUrls
+          setImageUrls((prev) => [...prev, formData.url]);
           setLoading(false);
           setSuccessMessage("Employee added successfully!");
 
-          // Clear the form
           setFormData({
             name: "",
             surname: "",
@@ -117,10 +115,9 @@ const AddEmployee = () => {
         })
         .catch((error) => {
           console.error("Error uploading image or sending data:", error);
-          setLoading(false); // Reset loading state even if there's an error
+          setLoading(false);
         });
     } else {
-      // If no image is selected, just submit the form data
       axios
         .post("http://localhost:5239/api/employee", formData)
         .then((response) => {
@@ -128,7 +125,6 @@ const AddEmployee = () => {
           setLoading(false);
           setSuccessMessage("Employee added successfully!");
 
-          // Clear the form
           setFormData({
             name: "",
             surname: "",
@@ -151,12 +147,11 @@ const AddEmployee = () => {
         })
         .catch((error) => {
           console.error("Error sending data:", error);
-          setLoading(false); // Reset loading state
+          setLoading(false);
         });
     }
   };
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -166,16 +161,13 @@ const AddEmployee = () => {
       const day = parseInt(value.substring(4, 6), 10);
       const genderCode = parseInt(value.substring(6, 10), 10);
 
-      // Determine the full year (assuming IDs starting with "00" and later refer to 2000s)
       const currentYear = new Date().getFullYear() % 100;
       const fullYear = year <= currentYear ? 2000 + year : 1900 + year;
 
-      // Format the date for the date input field
       const dateOfBirth = `${fullYear}-${month
         .toString()
         .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
 
-      // Determine gender based on genderCode
       const gender = genderCode < 5000 ? "Female" : "Male";
 
       setFormData({
@@ -202,11 +194,10 @@ const AddEmployee = () => {
 
       <div className={styles.box}>
         <form onSubmit={handleSubmit} className={styles.form}>
-
- {/* Success message */}
- {successMessage && (
-      <div className={styles.successMessage}>{successMessage}</div>
-    )}
+          {/* Success message */}
+          {successMessage && (
+            <div className={styles.successMessage}>{successMessage}</div>
+          )}
 
           {/* Row 1: Name & Surname */}
           <div className={styles.formRow}>
@@ -232,7 +223,9 @@ const AddEmployee = () => {
                 Surname
               </label>
               {errorMessages.surname && (
-                <div className={styles.errorMessage}>{errorMessages.surname}</div>
+                <div className={styles.errorMessage}>
+                  {errorMessages.surname}
+                </div>
               )}{" "}
               <input
                 type="text"
@@ -270,7 +263,9 @@ const AddEmployee = () => {
                 Identity Number
               </label>
               {errorMessages.identityNumber && (
-                <div className={styles.errorMessage}>{errorMessages.identityNumber}</div>
+                <div className={styles.errorMessage}>
+                  {errorMessages.identityNumber}
+                </div>
               )}{" "}
               <input
                 type="text"
@@ -291,7 +286,9 @@ const AddEmployee = () => {
                 Passport Number
               </label>
               {errorMessages.passportNumber && (
-                <div className={styles.errorMessage}>{errorMessages.passportNumber}</div>
+                <div className={styles.errorMessage}>
+                  {errorMessages.passportNumber}
+                </div>
               )}{" "}
               <input
                 type="text"
@@ -307,7 +304,9 @@ const AddEmployee = () => {
                 Date Of Birth
               </label>
               {errorMessages.dateOfBirth && (
-                <div className={styles.errorMessage}>{errorMessages.dateOfBirth}</div>
+                <div className={styles.errorMessage}>
+                  {errorMessages.dateOfBirth}
+                </div>
               )}{" "}
               <input
                 type="date"
@@ -327,7 +326,9 @@ const AddEmployee = () => {
                 Gender
               </label>
               {errorMessages.gender && (
-                <div className={styles.errorMessage}>{errorMessages.gender}</div>
+                <div className={styles.errorMessage}>
+                  {errorMessages.gender}
+                </div>
               )}{" "}
               <input
                 type="text"
@@ -340,17 +341,21 @@ const AddEmployee = () => {
             </div>
 
             <div className={styles.inputGroup}>
-              <label htmlFor="name" className={styles.label}>
+              <label htmlFor="maritalStatus" className={styles.label}>
                 Marital Status
               </label>
-              <input
-                type="text"
+              <select
                 name="maritalStatus"
-                placeholder="Marital Status"
                 value={formData.maritalStatus}
                 onChange={handleInputChange}
                 className={styles.inputField}
-              />
+              >
+                <option value="">Select Marital Status</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Widow">Widow</option>
+                <option value="Divorced">Divorced</option>
+              </select>
             </div>
           </div>
 
@@ -361,22 +366,29 @@ const AddEmployee = () => {
                 Employment Status
               </label>
               {errorMessages.contractType && (
-                <div className={styles.errorMessage}>{errorMessages.contractType}</div>
+                <div className={styles.errorMessage}>
+                  {errorMessages.contractType}
+                </div>
               )}{" "}
-              <input
-                type="text"
+              <select
                 name="contractType"
                 value={formData.contractType}
                 onChange={handleInputChange}
                 className={styles.inputField}
-              />
+              >
+                <option value="">Select Employment Status</option>
+                <option value="Permanent">Permanent</option>
+                <option value="Married">Temporal</option>
+              </select>
             </div>
             <div className={styles.inputGroup}>
               <label htmlFor="name" className={styles.label}>
                 Tax Number
               </label>
               {errorMessages.taxNumber && (
-                <div className={styles.errorMessage}>{errorMessages.taxNumber}</div>
+                <div className={styles.errorMessage}>
+                  {errorMessages.taxNumber}
+                </div>
               )}{" "}
               <input
                 type="text"
@@ -396,7 +408,9 @@ const AddEmployee = () => {
                 Start Date
               </label>
               {errorMessages.startDate && (
-                <div className={styles.errorMessage}>{errorMessages.startDate}</div>
+                <div className={styles.errorMessage}>
+                  {errorMessages.startDate}
+                </div>
               )}{" "}
               <input
                 type="date"
@@ -411,7 +425,9 @@ const AddEmployee = () => {
                 End Date
               </label>
               {errorMessages.endDate && (
-                <div className={styles.errorMessage}>{errorMessages.endDate}</div>
+                <div className={styles.errorMessage}>
+                  {errorMessages.endDate}
+                </div>
               )}{" "}
               <input
                 type="date"
@@ -424,81 +440,89 @@ const AddEmployee = () => {
           </div>
 
           {/* Address Rows: Physical and Postal */}
-          <div className={styles.addressRow}>
+          <div className={styles.formRow}>
             <div className={styles.inputGroup}>
-              <label htmlFor="name" className={styles.label}>
+              <label htmlFor="physicalAddress" className={styles.label}>
                 Physical Address
               </label>
               {errorMessages.physicalAddress && (
-                <div className={styles.errorMessage}>{errorMessages.physicalAddress}</div>
-              )}{" "}
+                <div className={styles.errorMessage}>
+                  {errorMessages.physicalAddress}
+                </div>
+              )}
               <input
                 type="text"
                 name="physicalAddress"
                 placeholder="Physical Address"
                 value={formData.physicalAddress}
                 onChange={handleInputChange}
-                className={styles.longinputField}
+                className={styles.inputField}
               />
             </div>
             <div className={styles.inputGroup}>
-              <label htmlFor="name" className={styles.label}>
+              <label htmlFor="postalAddress" className={styles.label}>
                 Postal Address
               </label>
               {errorMessages.postalAddress && (
-                <div className={styles.errorMessage}>{errorMessages.postalAddress}</div>
-              )}{" "}
+                <div className={styles.errorMessage}>
+                  {errorMessages.postalAddress}
+                </div>
+              )}
               <input
                 type="text"
                 name="postalAddress"
                 placeholder="Postal Address"
                 value={formData.postalAddress}
                 onChange={handleInputChange}
-                className={styles.longinputField}
+                className={styles.inputField}
               />
             </div>
           </div>
-          {/* Salary Field */}
-          <div className={styles.inputGroup}>
-            <label htmlFor="name" className={styles.label}>
-              Salary
-            </label>
-            {errorMessages.salary && (
-                <div className={styles.errorMessage}>{errorMessages.salary}</div>
-              )}{" "}
-            <input
-              type="number"
-              name="salary"
-              placeholder="Salary"
-              value={formData.salary}
-              onChange={handleInputChange}
-              className={styles.inputField}
-            />
-          </div>
+          {/* Salary and Password Fields */}
+          <div className={styles.formRow}>
+            <div className={styles.inputGroup}>
+              <label htmlFor="salary" className={styles.label}>
+                Salary
+              </label>
+              {errorMessages.salary && (
+                <div className={styles.errorMessage}>
+                  {errorMessages.salary}
+                </div>
+              )}
+              <input
+                type="number"
+                name="salary"
+                placeholder="Salary"
+                value={formData.salary}
+                onChange={handleInputChange}
+                className={styles.inputField}
+              />
+            </div>
 
-          {/* Password Field */}
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>
-              Password
-            </label>
-            {errorMessages.passwordHash && (
-                <div className={styles.errorMessage}>{errorMessages.passwordHash}</div>
-              )}{" "}
-            <input
-              type="passwordHash"
-              name="passwordHash"
-              placeholder="Password"
-              value={formData.passwordHash}
-              onChange={handleInputChange}
-              className={styles.inputField}
-            />
+            <div className={styles.inputGroup}>
+              <label htmlFor="passwordHash" className={styles.label}>
+                Password
+              </label>
+              {errorMessages.passwordHash && (
+                <div className={styles.errorMessage}>
+                  {errorMessages.passwordHash}
+                </div>
+              )}
+              <input
+                type="password"
+                name="passwordHash"
+                placeholder="Password"
+                value={formData.passwordHash}
+                onChange={handleInputChange}
+                className={styles.inputField}
+              />
+            </div>
           </div>
 
           {/* File upload */}
           <div className={styles.uploadContainer}>
             <label htmlFor="fileUpload" className={styles.customFileUpload}>
-              <i className="fas fa-cloud-upload-alt"></i>{" "}
-              {/* Font Awesome Cloud Icon */}
+              <FontAwesomeIcon icon={faCloudUploadAlt} />
               <span>Upload Image</span>
             </label>
             <input
