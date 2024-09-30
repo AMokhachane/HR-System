@@ -8,6 +8,7 @@ import Login from './Login';
 import Password from './Password';
 import Email from './Email';
 import EmployeeDetails from './EmployeeDetails'; // Import the new EmployeeDetails component
+import BankingDetail from './BankingDetail';
 
 
 
@@ -35,6 +36,7 @@ function App() {
         <Route path="/add-employee" element={<AddEmployee />} />
         <Route path="/email" element={<Email/>} />
         <Route path="/employee/:id" element={<EmployeeDetails />} />  {/* Dynamic route for employee details */}
+        <Route path="/banking-detail" element={<BankingDetail />} />
         
       </Routes>
     </Router>

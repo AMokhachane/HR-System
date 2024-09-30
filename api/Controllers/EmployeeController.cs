@@ -185,6 +185,8 @@ public async Task<IActionResult> GetEmployeeById(int id)
 
         return BadRequest("Email confirmation failed.");
     }
+
+    
 }
 
 
