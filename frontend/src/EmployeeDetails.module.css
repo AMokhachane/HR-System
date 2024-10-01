@@ -95,3 +95,26 @@ p {
 p strong {
 	color: #333;
 }
+
+.row {
+	display: flex;
+	gap: 20px; /* Space between fields */
+	flex-wrap: wrap;
+  }
+
+  
+  .inputGroup {
+	flex: 1;
+	min-width: 200px; /* Adjust the minimum width to fit your design */
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .inputField {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #FFC0CB;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
