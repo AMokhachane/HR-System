@@ -64,5 +64,61 @@ namespace api.Controllers
 
             return Ok(new { Message = "Banking details created successfully." });
         }
+
+
+[HttpGet]
+public async Task<IActionResult> GetAllBankingDetails()
+{
+    // Step 1: Retrieve all banking details from the database
+    var bankingDetails = await _context.BankingDetails.ToListAsync();
+
+    // Step 2: Check if there are any banking details
+    if (bankingDetails == null || bankingDetails.Count == 0)
+    {
+        return NotFound("No banking details found.");
+    }
+
+    // Step 3: Create a list of DTOs to return the banking details
+    var bankingDetailsDtos = bankingDetails.Select(b => new BankingDetailDto
+    {
+        BankName = b.BankName,
+        AccountNumber = b.AccountNumber,
+        AccountType = b.AccountType,
+        BranchCode = b.BranchCode,
+        AppUserId = b.AppUserId
+    }).ToList();
+
+    return Ok(bankingDetailsDtos);
+}
+
+
+
+
+
+
+        [HttpGet("{id}")]
+public async Task<IActionResult> GetBankingDetailsById(int id)
+{
+    // Step 1: Find the banking details using the provided ID
+    var bankingDetail = await _context.BankingDetails.FindAsync(id);
+    
+    // Step 2: Check if the banking details were found
+    if (bankingDetail == null)
+    {
+        return NotFound("Banking details not found.");
+    }
+
+    // Step 3: Return the banking details
+    var bankingDetailDto = new BankingDetailDto
+    {
+        BankName = bankingDetail.BankName,
+        AccountNumber = bankingDetail.AccountNumber,
+        AccountType = bankingDetail.AccountType,
+        BranchCode = bankingDetail.BranchCode,
+        AppUserId = bankingDetail.AppUserId
+    };
+
+    return Ok(bankingDetailDto);
+}
     }
 }
