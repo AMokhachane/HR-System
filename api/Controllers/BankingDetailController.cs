@@ -66,19 +66,33 @@ namespace api.Controllers
         }
 
 
-[HttpGet]
-public async Task<IActionResult> GetAllBankingDetails()
-{
-    // Step 1: Retrieve all banking details from the database
-    var bankingDetails = await _context.BankingDetails.ToListAsync();
 
-    // Step 2: Check if there are any banking details
-    if (bankingDetails == null || bankingDetails.Count == 0)
+
+
+[HttpGet]
+[Authorize] // Ensure only authenticated users can access
+public async Task<IActionResult> GetUserBankingDetails()
+{
+    // Step 1: Retrieve the logged-in user's AppUserId from the claims
+    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+    if (string.IsNullOrEmpty(userId))
     {
-        return NotFound("No banking details found.");
+        return Unauthorized("User is not authorized.");
     }
 
-    // Step 3: Create a list of DTOs to return the banking details
+    // Step 2: Retrieve the banking details for the logged-in user
+    var bankingDetails = await _context.BankingDetails
+        .Where(b => b.AppUserId == userId)
+        .ToListAsync();
+
+    // Step 3: Check if there are any banking details
+    if (bankingDetails == null || bankingDetails.Count == 0)
+    {
+        return NotFound("No banking details found for the current user.");
+    }
+
+    // Step 4: Return the banking details
     var bankingDetailsDtos = bankingDetails.Select(b => new BankingDetailDto
     {
         BankName = b.BankName,
@@ -92,33 +106,21 @@ public async Task<IActionResult> GetAllBankingDetails()
 }
 
 
-
-
-
-
-        [HttpGet("{id}")]
-public async Task<IActionResult> GetBankingDetailsById(int id)
+[HttpGet("{appUserId}")]
+public async Task<ActionResult<IEnumerable<BankingDetail>>> GetBankingDetailsByUserId(string appUserId)
 {
-    // Step 1: Find the banking details using the provided ID
-    var bankingDetail = await _context.BankingDetails.FindAsync(id);
-    
-    // Step 2: Check if the banking details were found
-    if (bankingDetail == null)
+    var bankingDetails = await _context.BankingDetails
+        .Where(b => b.AppUserId == appUserId)
+        .ToListAsync();
+
+    if (bankingDetails == null || !bankingDetails.Any())
     {
-        return NotFound("Banking details not found.");
+        return NotFound();
     }
 
-    // Step 3: Return the banking details
-    var bankingDetailDto = new BankingDetailDto
-    {
-        BankName = bankingDetail.BankName,
-        AccountNumber = bankingDetail.AccountNumber,
-        AccountType = bankingDetail.AccountType,
-        BranchCode = bankingDetail.BranchCode,
-        AppUserId = bankingDetail.AppUserId
-    };
-
-    return Ok(bankingDetailDto);
+    return bankingDetails;
 }
+
+
     }
 }
