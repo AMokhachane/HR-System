@@ -100,46 +100,48 @@ const Qualifications = ({ employeeId }) => {
 
   return (
     <div className={QualificationsCSS.container}>
-      <h2>Qualifications</h2>
-      <form onSubmit={isEditable ? handleUpdateQualification : handlePostQualification} className={QualificationsCSS.form}>
-        <input
-          type="text"
-          placeholder="Qualification Type"
-          value={qualificationType}
-          onChange={(e) => setQualificationType(e.target.value)}
-          required
-        />
-        <input
-          type="month" // Use month input type for better UX in selecting year
-          placeholder="Year Completed"
-          value={yearCompleted}
-          onChange={(e) => setYearCompleted(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Institution"
-          value={institution}
-          onChange={(e) => setInstitution(e.target.value)}
-          required
-        />
-        <button type="submit">{isEditable ? "Update Qualification" : "Add Qualification"}</button>
-        {isEditable && <button type="button" onClick={() => setIsEditable(false)}>Cancel</button>}
-      </form>
+        <h2>Qualifications</h2>
+        
 
-      <div className={QualificationsCSS.qualificationsList}>
-        <h3>Existing Qualifications:</h3>
-        <ul>
-          {qualifications.map((qualification) => (
-            <li key={qualification.id}>
-              {qualification.qualificationType} ({qualification.yearCompleted}) - {qualification.institution}
-              <button onClick={() => handleEditQualification(qualification)}>Edit</button>
-            </li>
-          ))}
-        </ul>
-      </div>
+        <div className={QualificationsCSS.qualificationsList}>
+            <h3>Existing Qualifications:</h3>
+            <ul>
+                {qualifications.map((qualification) => (
+                    <li key={qualification.id}>
+                        {qualification.qualificationType} ({qualification.yearCompleted}) - {qualification.institution}
+                        <button onClick={() => handleEditQualification(qualification)}>Edit</button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+        <form onSubmit={isEditable ? handleUpdateQualification : handlePostQualification} className={QualificationsCSS.form}>
+        <h3>Add Qualifications:</h3>
+            <input
+                type="text"
+                placeholder="Qualification Type"
+                value={qualificationType}
+                onChange={(e) => setQualificationType(e.target.value)}
+                required
+            />
+            <input
+                type="month" // Use month input type for better UX in selecting year
+                placeholder="Year Completed"
+                value={yearCompleted}
+                onChange={(e) => setYearCompleted(e.target.value)}
+                required
+            />
+            <input
+                type="text"
+                placeholder="Institution"
+                value={institution}
+                onChange={(e) => setInstitution(e.target.value)}
+                required
+            />
+            <button type="submit">{isEditable ? "Update Qualification" : "Add Qualification"}</button>
+            {isEditable && <button type="button" onClick={() => setIsEditable(false)}>Cancel</button>}
+        </form>
     </div>
-  );
+);
 };
 
 export default Qualifications;
