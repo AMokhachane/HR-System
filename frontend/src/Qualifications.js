@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import QualificationsCSS from "./Qualifications.module.css"; // Create this CSS module
+import QualificationsCSS from "./Qualifications.module.css"; // Ensure this CSS module is created
 
 const Qualifications = ({ employeeId }) => {
   const [qualifications, setQualifications] = useState([]);
@@ -9,6 +9,8 @@ const Qualifications = ({ employeeId }) => {
   const [institution, setInstitution] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isEditable, setIsEditable] = useState(false); // State to toggle edit mode
+  const [selectedQualification, setSelectedQualification] = useState(null); // Track which qualification is selected for editing
 
   // Function to fetch qualifications
   const fetchQualifications = async () => {
@@ -37,10 +39,12 @@ const Qualifications = ({ employeeId }) => {
     try {
       const newQualification = {
         qualificationType,
-        yearCompleted: new Date(yearCompleted).getFullYear(), // Ensure only the year is sent
+        yearCompleted: yearCompleted.split("-")[0], // Extracting the year directly from YYYY-MM format
         institution,
         employeeId,
       };
+
+      console.log("Posting qualification:", newQualification); // Log to check data being sent
 
       await axios.post("http://localhost:5239/api/qualifications", newQualification);
       // Clear input fields
@@ -55,14 +59,49 @@ const Qualifications = ({ employeeId }) => {
     }
   };
 
+  // Function to handle editing a qualification
+  const handleEditQualification = (qualification) => {
+    setSelectedQualification(qualification);
+    setQualificationType(qualification.qualificationType);
+    setYearCompleted(qualification.yearCompleted);
+    setInstitution(qualification.institution);
+    setIsEditable(true);
+  };
+
+  // Function to submit the edited qualification
+  const handleUpdateQualification = async (e) => {
+    e.preventDefault();
+
+    try {
+      const updatedQualification = {
+        ...selectedQualification,
+        qualificationType,
+        yearCompleted: yearCompleted.split("-")[0], // Extract year for update
+        institution,
+      };
+
+      await axios.put(`http://localhost:5239/api/qualifications/${selectedQualification.id}`, updatedQualification);
+      setIsEditable(false); // Exit edit mode
+      setSelectedQualification(null); // Reset selected qualification
+      // Clear input fields
+      setQualificationType("");
+      setYearCompleted("");
+      setInstitution("");
+      // Re-fetch qualifications after updating
+      fetchQualifications();
+    } catch (err) {
+      console.error(err);
+      setError("An error occurred while updating the qualification.");
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div className={QualificationsCSS.error}>{error}</div>;
-
 
   return (
     <div className={QualificationsCSS.container}>
       <h2>Qualifications</h2>
-      <form onSubmit={handlePostQualification} className={QualificationsCSS.form}>
+      <form onSubmit={isEditable ? handleUpdateQualification : handlePostQualification} className={QualificationsCSS.form}>
         <input
           type="text"
           placeholder="Qualification Type"
@@ -84,7 +123,8 @@ const Qualifications = ({ employeeId }) => {
           onChange={(e) => setInstitution(e.target.value)}
           required
         />
-        <button type="submit">Add Qualification</button>
+        <button type="submit">{isEditable ? "Update Qualification" : "Add Qualification"}</button>
+        {isEditable && <button type="button" onClick={() => setIsEditable(false)}>Cancel</button>}
       </form>
 
       <div className={QualificationsCSS.qualificationsList}>
@@ -93,6 +133,7 @@ const Qualifications = ({ employeeId }) => {
           {qualifications.map((qualification) => (
             <li key={qualification.id}>
               {qualification.qualificationType} ({qualification.yearCompleted}) - {qualification.institution}
+              <button onClick={() => handleEditQualification(qualification)}>Edit</button>
             </li>
           ))}
         </ul>
