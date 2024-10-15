@@ -533,15 +533,11 @@ const AddEmployee = () => {
             />
           </div>
 
-          {/* Submit button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className={styles.uploadButton}
-          >
-            {loading ? "Submitting..." : "Add Employee"}
-          </button>
-        </form>
+         {/* Submit Button */}
+  <button type="submit" className={styles.submitButton} disabled={loading}>
+    {loading ? "Submitting..." : "Submit"}
+  </button>
+</form>
 
         {/* Display uploaded images */}
         <div className={styles.imageContainer}>

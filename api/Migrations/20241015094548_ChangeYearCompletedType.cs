@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class New : Migration
+    public partial class ChangeYearCompletedType : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -218,6 +218,29 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BankingDetails",
+                columns: table => new
+                {
+                    BankingDetailId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountNumber = table.Column<int>(type: "int", nullable: false),
+                    BranchCode = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BankingDetails", x => x.BankingDetailId);
+                    table.ForeignKey(
+                        name: "FK_BankingDetails_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "AppUserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
@@ -254,28 +277,6 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BankingDetails",
-                columns: table => new
-                {
-                    BankingDetailId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AccountType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AccountNumber = table.Column<int>(type: "int", nullable: false),
-                    BranchCode = table.Column<int>(type: "int", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BankingDetails", x => x.BankingDetailId);
-                    table.ForeignKey(
-                        name: "FK_BankingDetails_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "EmployeeId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "JobTitles",
                 columns: table => new
                 {
@@ -301,7 +302,7 @@ namespace api.Migrations
                     QualificationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QualificationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    YearCompleted = table.Column<DateOnly>(type: "date", nullable: false),
+                    YearCompleted = table.Column<int>(type: "int", nullable: false),
                     Institution = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmployeeId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -358,8 +359,8 @@ namespace api.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "5839274b-7be0-475a-b8a5-808608004d95", null, "User", "USER" },
-                    { "5bd9c6ea-fb59-4681-a9df-865bb0fb233a", null, "Admin", "ADMIN" }
+                    { "3a1fe0ce-5a3f-4494-9253-21a0f6469b59", null, "Admin", "ADMIN" },
+                    { "57bdaa6d-28a0-4e9e-8b27-d695777e9208", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -402,9 +403,9 @@ namespace api.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BankingDetails_EmployeeId",
+                name: "IX_BankingDetails_AppUserId",
                 table: "BankingDetails",
-                column: "EmployeeId");
+                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_AppUserId",

@@ -51,13 +51,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1f2eef88-b232-448c-ad24-3721fe15a0a3",
+                            Id = "3a1fe0ce-5a3f-4494-9253-21a0f6469b59",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "bdee55e4-2a02-4091-a944-d7ddf47daff3",
+                            Id = "57bdaa6d-28a0-4e9e-8b27-d695777e9208",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -477,8 +477,8 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("YearCompleted")
-                        .HasColumnType("date");
+                    b.Property<int>("YearCompleted")
+                        .HasColumnType("int");
 
                     b.HasKey("QualificationId");
 

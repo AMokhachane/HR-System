@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240930065235_New")]
-    partial class New
+    [Migration("20241015094548_ChangeYearCompletedType")]
+    partial class ChangeYearCompletedType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5bd9c6ea-fb59-4681-a9df-865bb0fb233a",
+                            Id = "3a1fe0ce-5a3f-4494-9253-21a0f6469b59",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "5839274b-7be0-475a-b8a5-808608004d95",
+                            Id = "57bdaa6d-28a0-4e9e-8b27-d695777e9208",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -253,6 +253,10 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("BankName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -260,12 +264,9 @@ namespace api.Migrations
                     b.Property<int>("BranchCode")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.HasKey("BankingDetailId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("BankingDetails");
                 });
@@ -479,8 +480,8 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("YearCompleted")
-                        .HasColumnType("date");
+                    b.Property<int>("YearCompleted")
+                        .HasColumnType("int");
 
                     b.HasKey("QualificationId");
 
@@ -591,11 +592,13 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.BankingDetail", b =>
                 {
-                    b.HasOne("api.Models.Employee", "Employee")
+                    b.HasOne("api.Models.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Employee");
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("api.Models.Employee", b =>
