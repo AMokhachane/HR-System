@@ -4,13 +4,14 @@ import axios from "axios";
 import EmployeeDetailsCSS from "./EmployeeDetails.module.css"; // Create this CSS module
 import Sidebar from "./Sidebar";
 import BankingDetail from "./BankingDetail";
+import Qualifications from "./Qualifications";
 
 const EmployeeDetails = () => {
   const { id } = useParams(); // Get the ID from the URL parameters
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showBankingForm, setShowBankingForm] = useState(false); // State to toggle the banking form
+  const [activeTab, setActiveTab] = useState("profile"); // State to manage active tab
 
   useEffect(() => {
     const fetchEmployeeDetails = async () => {
@@ -37,7 +38,12 @@ const EmployeeDetails = () => {
 
   const handleBankingDetailsSuccess = (data) => {
     console.log("Banking details saved successfully:", data);
-    setShowBankingForm(false); // Hide the banking form after submission
+    setActiveTab("banking"); // Set active tab to banking after submission
+  };
+
+  const handleQualificationsSuccess = (data) => {
+    console.log("Qualifications saved successfully:", data);
+    setActiveTab("qualifications"); // Set active tab to qualifications after submission
   };
 
   if (loading) return <div>Loading...</div>;
@@ -73,23 +79,32 @@ const EmployeeDetails = () => {
 
           {/* Tabs */}
           <div className={EmployeeDetailsCSS.tabs}>
-            <button>Profile Info</button>
-            <button onClick={() => setShowBankingForm(!showBankingForm)}>
+            <button onClick={() => setActiveTab("profile")}>Profile Info</button>
+            <button onClick={() => setActiveTab("banking")}>
               Banking Details
             </button>
-            <button>Qualifications</button>
-            <button>Job Title</button>
-            <button>Reports</button>
+            <button onClick={() => setActiveTab("qualifications")}>
+              Qualifications
+            </button>
+            <button onClick={() => setActiveTab("jobTitle")}>Job Title</button>
+            <button onClick={() => setActiveTab("reports")}>Reports</button>
           </div>
         </div>
 
         <div className={EmployeeDetailsCSS.details}>
-          {showBankingForm ? (
+          {activeTab === "banking" && (
             <BankingDetail
               appUserId={employee.appUserId}
               onSuccess={handleBankingDetailsSuccess}
             />
-          ) : (
+          )}
+          {activeTab === "qualifications" && (
+            <Qualifications
+              appUserId={employee.appUserId}
+              onSuccess={handleQualificationsSuccess}
+            />
+          )}
+          {activeTab === "profile" && (
             <>
               {/* Basic Details */}
               <div className={EmployeeDetailsCSS.section}>
@@ -101,9 +116,7 @@ const EmployeeDetails = () => {
                       <strong>Date of Birth:</strong>
                     </p>
                     <input
-                      value={new Date(
-                        employee.dateOfBirth
-                      ).toLocaleDateString()}
+                      value={new Date(employee.dateOfBirth).toLocaleDateString()}
                       className={EmployeeDetailsCSS.inputField}
                       readOnly
                     />
@@ -140,6 +153,7 @@ const EmployeeDetails = () => {
                     <input
                       value={employee.email}
                       className={EmployeeDetailsCSS.inputField}
+                      readOnly
                     />
                   </div>
                 </div>
@@ -152,6 +166,7 @@ const EmployeeDetails = () => {
                     <input
                       value={employee.identityNumber}
                       className={EmployeeDetailsCSS.inputField}
+                      readOnly
                     />
                   </div>
                 </div>
@@ -169,6 +184,7 @@ const EmployeeDetails = () => {
                     <input
                       value={employee.contractType}
                       className={EmployeeDetailsCSS.inputField}
+                      readOnly
                     />
                   </div>
 
@@ -179,6 +195,7 @@ const EmployeeDetails = () => {
                     <input
                       value={employee.startDate}
                       className={EmployeeDetailsCSS.inputField}
+                      readOnly
                     />
                   </div>
                 </div>
@@ -191,6 +208,7 @@ const EmployeeDetails = () => {
                     <input
                       value={employee.endDate}
                       className={EmployeeDetailsCSS.inputField}
+                      readOnly
                     />
                   </div>
 
@@ -201,6 +219,7 @@ const EmployeeDetails = () => {
                     <input
                       value={employee.taxNumber}
                       className={EmployeeDetailsCSS.inputField}
+                      readOnly
                     />
                   </div>
                 </div>
@@ -213,6 +232,7 @@ const EmployeeDetails = () => {
                     <input
                       value={employee.salary}
                       className={EmployeeDetailsCSS.inputField}
+                      readOnly
                     />
                   </div>
 
@@ -223,6 +243,7 @@ const EmployeeDetails = () => {
                     <input
                       value={employee.physicalAddress}
                       className={EmployeeDetailsCSS.inputField}
+                      readOnly
                     />
                   </div>
                 </div>
@@ -235,6 +256,7 @@ const EmployeeDetails = () => {
                     <input
                       value={employee.postalAddress}
                       className={EmployeeDetailsCSS.inputField}
+                      readOnly
                     />
                   </div>
                 </div>

@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace api.Models
+namespace api.Dtos.Employee
 {
-    public class Qualification
+    public class QualificationDto
     {
-        public int QualificationId { get; set; }
-        public string QualificationType { get; set; } = string.Empty;
+         public string QualificationType { get; set; } = string.Empty;
         public int YearCompleted { get; set; }
         public string Institution { get; set; } = string.Empty;
         public int? EmployeeId { get; set; }
-        public Employee? Employee { get; set; }
     }
 }
