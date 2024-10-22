@@ -1,33 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // Ensure useNavigate is imported
 import axios from "axios";
-import EmployeeDetailsCSS from "./EmployeeDetails.module.css"; // Create this CSS module
+import EmployeeDetailsCSS from "./EmployeeDetails.module.css";
 import Sidebar from "./Sidebar";
 import BankingDetail from "./BankingDetail";
 import Qualifications from "./Qualifications";
 
 const EmployeeDetails = () => {
-  const { id } = useParams(); // Get the ID from the URL parameters
+  const { id } = useParams();
+  const navigate = useNavigate(); // Initialize useNavigate
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [activeTab, setActiveTab] = useState("profile"); // State to manage active tab
+  const [activeTab, setActiveTab] = useState("profile");
 
   useEffect(() => {
     const fetchEmployeeDetails = async () => {
       try {
         console.log(`Fetching employee details for ID: ${id}`);
-        const response = await axios.get(
-          `http://localhost:5239/api/employee/${id}`
-        );
+        const response = await axios.get(`http://localhost:5239/api/employee/${id}`);
         console.log("Response:", response.data);
         setEmployee(response.data);
       } catch (err) {
         console.error(err);
-        setError(
-          err.response?.data?.message ||
-            "An error occurred while fetching employee details."
-        );
+        setError(err.response?.data?.message || "An error occurred while fetching employee details.");
       } finally {
         setLoading(false);
       }
@@ -36,18 +32,39 @@ const EmployeeDetails = () => {
     fetchEmployeeDetails();
   }, [id]);
 
+  // Check if the logged-in user can view the employee details
+  useEffect(() => {
+    if (employee) {
+      // Retrieve and parse user data from local storage
+      const userData = JSON.parse(localStorage.getItem("user"));
+      const userEmail = userData ? userData.userEmail : null; // Get userEmail from parsed object
+
+      console.log("User Email from localStorage:", userEmail);
+      console.log("Employee Email:", employee.email);
+
+      // Compare emails
+      if (userEmail && userEmail.trim() !== employee.email.trim()) {
+        console.log("Email mismatch. Redirecting to home page.");
+        navigate("/home"); // Redirect if emails do not match
+      }
+    }
+  }, [employee, navigate]);
+
   const handleBankingDetailsSuccess = (data) => {
     console.log("Banking details saved successfully:", data);
-    setActiveTab("banking"); // Set active tab to banking after submission
+    setActiveTab("banking");
   };
 
   const handleQualificationsSuccess = (data) => {
     console.log("Qualifications saved successfully:", data);
-    setActiveTab("qualifications"); // Set active tab to qualifications after submission
+    setActiveTab("qualifications");
   };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className={EmployeeDetailsCSS.error}>{error}</div>;
+
+  // Render nothing or a message if the employee data is not set
+  if (!employee) return null;
 
   return (
     <div className={EmployeeDetailsCSS.container}>
@@ -63,7 +80,7 @@ const EmployeeDetails = () => {
           <div className={EmployeeDetailsCSS.profileInfo}>
             <div className={EmployeeDetailsCSS.profilePicture}>
               <img
-                src={employee.url} // Assuming url is a property in employee object
+                src={employee.url}
                 alt={`${employee.name} ${employee.surname}`}
                 className={EmployeeDetailsCSS.employeeImage}
               />
@@ -80,12 +97,8 @@ const EmployeeDetails = () => {
           {/* Tabs */}
           <div className={EmployeeDetailsCSS.tabs}>
             <button onClick={() => setActiveTab("profile")}>Profile Info</button>
-            <button onClick={() => setActiveTab("banking")}>
-              Banking Details
-            </button>
-            <button onClick={() => setActiveTab("qualifications")}>
-              Qualifications
-            </button>
+            <button onClick={() => setActiveTab("banking")}>Banking Details</button>
+            <button onClick={() => setActiveTab("qualifications")}>Qualifications</button>
             <button onClick={() => setActiveTab("jobTitle")}>Job Title</button>
             <button onClick={() => setActiveTab("reports")}>Reports</button>
           </div>
@@ -109,23 +122,17 @@ const EmployeeDetails = () => {
               {/* Basic Details */}
               <div className={EmployeeDetailsCSS.section}>
                 <h3>Basic Details</h3>
-
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Date of Birth:</strong>
-                    </p>
+                    <p><strong>Date of Birth:</strong></p>
                     <input
                       value={new Date(employee.dateOfBirth).toLocaleDateString()}
                       className={EmployeeDetailsCSS.inputField}
                       readOnly
                     />
                   </div>
-
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Gender:</strong>
-                    </p>
+                    <p><strong>Gender:</strong></p>
                     <input
                       value={employee.gender}
                       className={EmployeeDetailsCSS.inputField}
@@ -133,23 +140,17 @@ const EmployeeDetails = () => {
                     />
                   </div>
                 </div>
-
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Marital Status:</strong>
-                    </p>
+                    <p><strong>Marital Status:</strong></p>
                     <input
                       value={employee.maritalStatus}
                       className={EmployeeDetailsCSS.inputField}
                       readOnly
                     />
                   </div>
-
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Email:</strong>
-                    </p>
+                    <p><strong>Email:</strong></p>
                     <input
                       value={employee.email}
                       className={EmployeeDetailsCSS.inputField}
@@ -157,12 +158,9 @@ const EmployeeDetails = () => {
                     />
                   </div>
                 </div>
-
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Identity Number:</strong>
-                    </p>
+                    <p><strong>Identity Number:</strong></p>
                     <input
                       value={employee.identityNumber}
                       className={EmployeeDetailsCSS.inputField}
@@ -175,23 +173,17 @@ const EmployeeDetails = () => {
               {/* Employment Details */}
               <div className={EmployeeDetailsCSS.section}>
                 <h3>Employment Details</h3>
-
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Contract Type:</strong>
-                    </p>
+                    <p><strong>Contract Type:</strong></p>
                     <input
                       value={employee.contractType}
                       className={EmployeeDetailsCSS.inputField}
                       readOnly
                     />
                   </div>
-
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Start Date:</strong>
-                    </p>
+                    <p><strong>Start Date:</strong></p>
                     <input
                       value={employee.startDate}
                       className={EmployeeDetailsCSS.inputField}
@@ -199,23 +191,17 @@ const EmployeeDetails = () => {
                     />
                   </div>
                 </div>
-
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>End Date:</strong>
-                    </p>
+                    <p><strong>End Date:</strong></p>
                     <input
                       value={employee.endDate}
                       className={EmployeeDetailsCSS.inputField}
                       readOnly
                     />
                   </div>
-
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Tax Number:</strong>
-                    </p>
+                    <p><strong>Tax Number:</strong></p>
                     <input
                       value={employee.taxNumber}
                       className={EmployeeDetailsCSS.inputField}
@@ -223,23 +209,17 @@ const EmployeeDetails = () => {
                     />
                   </div>
                 </div>
-
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Salary:</strong>
-                    </p>
+                    <p><strong>Salary:</strong></p>
                     <input
                       value={employee.salary}
                       className={EmployeeDetailsCSS.inputField}
                       readOnly
                     />
                   </div>
-
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Physical Address:</strong>
-                    </p>
+                    <p><strong>Physical Address:</strong></p>
                     <input
                       value={employee.physicalAddress}
                       className={EmployeeDetailsCSS.inputField}
@@ -247,12 +227,9 @@ const EmployeeDetails = () => {
                     />
                   </div>
                 </div>
-
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p>
-                      <strong>Postal Address:</strong>
-                    </p>
+                    <p><strong>Postal Address:</strong></p>
                     <input
                       value={employee.postalAddress}
                       className={EmployeeDetailsCSS.inputField}
