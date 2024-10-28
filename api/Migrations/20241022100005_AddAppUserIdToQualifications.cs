@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeYearCompletedType : Migration
+    public partial class AddAppUserIdToQualifications : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -277,6 +277,28 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Qualifications",
+                columns: table => new
+                {
+                    QualificationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    QualificationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    YearCompleted = table.Column<int>(type: "int", nullable: false),
+                    Institution = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Qualifications", x => x.QualificationId);
+                    table.ForeignKey(
+                        name: "FK_Qualifications_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "AppUserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "JobTitles",
                 columns: table => new
                 {
@@ -290,27 +312,6 @@ namespace api.Migrations
                     table.PrimaryKey("PK_JobTitles", x => x.JobTitleId);
                     table.ForeignKey(
                         name: "FK_JobTitles_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "EmployeeId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Qualifications",
-                columns: table => new
-                {
-                    QualificationId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    QualificationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    YearCompleted = table.Column<int>(type: "int", nullable: false),
-                    Institution = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Qualifications", x => x.QualificationId);
-                    table.ForeignKey(
-                        name: "FK_Qualifications_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId");
@@ -359,8 +360,8 @@ namespace api.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "3a1fe0ce-5a3f-4494-9253-21a0f6469b59", null, "Admin", "ADMIN" },
-                    { "57bdaa6d-28a0-4e9e-8b27-d695777e9208", null, "User", "USER" }
+                    { "39f3e6f0-6fdb-42c6-8d53-3dc4d530ced6", null, "Admin", "ADMIN" },
+                    { "a1f164a5-4f09-4fce-80cc-5be68f8540f2", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -428,9 +429,9 @@ namespace api.Migrations
                 column: "JobGradeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Qualifications_EmployeeId",
+                name: "IX_Qualifications_AppUserId",
                 table: "Qualifications",
-                column: "EmployeeId");
+                column: "AppUserId");
         }
 
         /// <inheritdoc />

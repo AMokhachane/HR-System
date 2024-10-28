@@ -11,7 +11,8 @@ namespace api.Models
         public string QualificationType { get; set; } = string.Empty;
         public int YearCompleted { get; set; }
         public string Institution { get; set; } = string.Empty;
-        public int? EmployeeId { get; set; }
-        public Employee? Employee { get; set; }
+      public string AppUserId { get; set; } // Foreign key linking to AppUser
+
+    public AppUser AppUser { get; set; } // Navigation property
     }
 }

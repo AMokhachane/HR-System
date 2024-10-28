@@ -21,18 +21,17 @@ namespace api.Controllers
         }
 
         // GET: api/qualifications
-        [HttpGet]
+ [HttpGet]
 public async Task<ActionResult<IEnumerable<QualificationDto>>> GetQualifications()
 {
     // Fetch qualifications and map to DTO
     var qualifications = await _context.Qualifications
-        .Include(q => q.Employee)
         .Select(q => new QualificationDto
         {
             QualificationType = q.QualificationType,
             YearCompleted = q.YearCompleted,
             Institution = q.Institution,
-            EmployeeId = q.EmployeeId
+            AppUserId = q.AppUserId 
         })
         .ToListAsync();
 
@@ -55,7 +54,7 @@ public async Task<ActionResult<IEnumerable<QualificationDto>>> GetQualifications
                 QualificationType = qualificationDto.QualificationType,
                 YearCompleted = qualificationDto.YearCompleted,
                 Institution = qualificationDto.Institution,
-                EmployeeId = qualificationDto.EmployeeId
+                 AppUserId = qualificationDto.AppUserId 
             };
 
             // Add the qualification to the context
@@ -73,14 +72,13 @@ public async Task<ActionResult<QualificationDto>> GetQualification(int id)
 {
     // Fetch the qualification by ID and project it to QualificationDto
     var qualification = await _context.Qualifications
-        .Include(q => q.Employee)
         .Where(q => q.QualificationId == id) // Filter on the Qualification entity
         .Select(q => new QualificationDto
         {
             QualificationType = q.QualificationType,
             YearCompleted = q.YearCompleted,
             Institution = q.Institution,
-            EmployeeId = q.EmployeeId
+            AppUserId = q.AppUserId // Assuming you want to return the AppUserId instead of EmployeeId
         })
         .FirstOrDefaultAsync(); // Now FirstOrDefaultAsync operates on the projected result
 

@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241015094548_ChangeYearCompletedType")]
-    partial class ChangeYearCompletedType
+    [Migration("20241022100005_AddAppUserIdToQualifications")]
+    partial class AddAppUserIdToQualifications
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3a1fe0ce-5a3f-4494-9253-21a0f6469b59",
+                            Id = "39f3e6f0-6fdb-42c6-8d53-3dc4d530ced6",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "57bdaa6d-28a0-4e9e-8b27-d695777e9208",
+                            Id = "a1f164a5-4f09-4fce-80cc-5be68f8540f2",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -469,8 +469,9 @@ namespace api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QualificationId"));
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Institution")
                         .IsRequired()
@@ -485,7 +486,7 @@ namespace api.Migrations
 
                     b.HasKey("QualificationId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Qualifications");
                 });
@@ -641,11 +642,13 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Models.Qualification", b =>
                 {
-                    b.HasOne("api.Models.Employee", "Employee")
+                    b.HasOne("api.Models.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Employee");
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("api.Models.AppUser", b =>

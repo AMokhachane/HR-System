@@ -10,14 +10,24 @@ const Qualifications = ({ employeeId }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [isEditable, setIsEditable] = useState(false); // State to toggle edit mode
-  const [selectedQualification, setSelectedQualification] = useState(null); // Track which qualification is selected for editing
+  const [selectedQualification, setSelectedQualification] = useState(null);
+  const [userID, setUserID] = useState(null); // Track which qualification is selected for editing
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const id = user?.userID;
+    if (!id) {
+      console.error("No user ID found in local storage.");
+    }
+    setUserID(id);
+  }, []);
 
   // Function to fetch qualifications
   const fetchQualifications = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5239/api/qualifications?employeeId=${employeeId}`
-      );
+      if (!userID) return; // Exit if userID is not set
+
+      const response = await axios.get(`http://localhost:5239/api/qualifications?employeeId=${userID}`);
       setQualifications(response.data);
     } catch (err) {
       console.error(err);
@@ -27,21 +37,26 @@ const Qualifications = ({ employeeId }) => {
     }
   };
 
-  // Fetch qualifications on component mount
+  // Fetch qualifications on component mount or when userID changes
   useEffect(() => {
     fetchQualifications();
-  }, [employeeId]);
+  }, [userID]);
 
   // Function to post a new qualification
   const handlePostQualification = async (e) => {
     e.preventDefault();
+
+    if (!userID) {
+      console.error("User ID is not set. Qualification not posted.");
+      return; // Exit early
+    }
 
     try {
       const newQualification = {
         qualificationType,
         yearCompleted: yearCompleted.split("-")[0], // Extracting the year directly from YYYY-MM format
         institution,
-        employeeId,
+        employeeId: userID, // Use userID here
       };
 
       console.log("Posting qualification:", newQualification); // Log to check data being sent
@@ -57,7 +72,7 @@ const Qualifications = ({ employeeId }) => {
       console.error(err);
       setError("An error occurred while posting the qualification.");
     }
-  };
+  }
 
   // Function to handle editing a qualification
   const handleEditQualification = (qualification) => {
