@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.AspNetCore.Authorization;
+﻿﻿﻿﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +29,9 @@ namespace api.Controllers
         private readonly ISenderEmail emailSender;
         private readonly ILogger<AccountController> logger;
         private readonly ApplicationDBContext dbContext; // Add your DbContext
-    
+        
 
-    public  AccountController ( SignInManager<AppUser> sm, UserManager<AppUser> um, IPasswordHasher<AppUser> ph, ISenderEmail es, ILogger<AccountController> logger, ApplicationDBContext dbContext  )
+        public  AccountController ( SignInManager<AppUser> sm, UserManager<AppUser> um, IPasswordHasher<AppUser> ph, ISenderEmail es, ILogger<AccountController> logger, ApplicationDBContext dbContext  )
     {
 
 signInManager = sm;
@@ -181,9 +181,7 @@ signInManager = sm;
         }
 
 
-        // Endpoint to login a user
-        // Login endpoint
-   [HttpPost("login")]
+[HttpPost("login")]
 public async Task<ActionResult> LoginUser(Login login)
 {
     try
@@ -191,27 +189,47 @@ public async Task<ActionResult> LoginUser(Login login)
         // Find the user by email
         var user = await userManager.FindByEmailAsync(login.Email);
 
-        // Check if user exists
         if (user == null)
         {
             logger.LogWarning("Login attempt failed for non-existent email {Email}", login.Email);
             return BadRequest(new { message = "Please check your credentials and try again." });
         }
 
-        // Check if the user's email is confirmed
         if (!user.EmailConfirmed)
         {
             logger.LogWarning("Login attempt for unconfirmed email {Email}", login.Email);
             return Unauthorized(new { message = "Email not confirmed yet." });
         }
 
-        // Attempt to sign in the user with the correct password field
         var result = await signInManager.PasswordSignInAsync(user.UserName, login.Password, login.Remember, lockoutOnFailure: true);
 
         if (result.Succeeded)
         {
-            logger.LogInformation("User {UserId} logged in successfully", user.Id);
-            return Ok(new { message = "Login successful.", userEmail = user.Email, userID = user.Id });
+            var roles = await userManager.GetRolesAsync(user); // Get roles
+
+            // Fetch the employee's role information from database
+            var employee = await dbContext.Employees
+                .Where(e => e.AppUserId == user.Id)
+                .Select(e => new 
+                { 
+                    e.RoleId, 
+                    RoleName = dbContext.Roles.FirstOrDefault(r => r.Id == e.RoleId).Name 
+                })
+                .FirstOrDefaultAsync();
+
+            if (employee == null)
+            {
+                return BadRequest(new { message = "Employee record not found." });
+            }
+
+            return Ok(new { 
+                message = "Login successful.", 
+                userEmail = user.Email, 
+                userID = user.Id,
+                roles, // List of role names from Identity
+                roleId = employee.RoleId,
+                roleName = employee.RoleName // Send the actual role name
+            });
         }
 
         if (result.RequiresTwoFactor)
@@ -235,6 +253,9 @@ public async Task<ActionResult> LoginUser(Login login)
         return BadRequest(new { message = "An error occurred. Please try again." });
     }
 }
+
+
+
 
   // Endpoint to initiate forgot password process
         [HttpPost("forgotpassword")]

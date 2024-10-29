@@ -32,6 +32,11 @@ namespace api.Data
         {
             base.OnModelCreating(builder);
 
+           builder.Entity<Employee>()
+            .Property(e => e.RoleId)
+            .IsRequired(false); // Make RoleId nullable  
+
+
     // Define the relationship between Employee and AppUser
     builder.Entity<AppUser>()
         .Property(u => u.Id)
@@ -53,7 +58,8 @@ namespace api.Data
     List<IdentityRole> roles = new List<IdentityRole>
     {
         new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
-        new IdentityRole { Name = "User", NormalizedName = "USER" }
+        new IdentityRole { Name = "Employee", NormalizedName = "Employee" },
+        new IdentityRole { Name = "Executive", NormalizedName = "Executive" }
     };
     
     builder.Entity<IdentityRole>().HasData(roles);

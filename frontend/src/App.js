@@ -10,6 +10,7 @@ import Email from './Email';
 import EmployeeDetails from './EmployeeDetails'; // Import the new EmployeeDetails component
 import BankingDetail from './BankingDetail';
 import Qualifications from "./Qualifications";
+import AdminDashboard from "./AdminDashboard"
 
 
 
@@ -39,6 +40,7 @@ function App() {
         <Route path="/employee/:id" element={<EmployeeDetails />} />  {/* Dynamic route for employee details */}
         <Route path="/banking-detail" element={<BankingDetail />} />
         <Route path="/qualifications" element={<Qualifications />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
         
       </Routes>
     </Router>

@@ -24,5 +24,8 @@ namespace api.Dtos.Employee
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime EndDate { get; set; }
         public string PasswordHash { get; set; }
+
+ public string? RoleId { get; set; } // Add nullable RoleId
+
     }
 }

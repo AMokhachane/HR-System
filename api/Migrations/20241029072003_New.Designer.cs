@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241022100005_AddAppUserIdToQualifications")]
-    partial class AddAppUserIdToQualifications
+    [Migration("20241029072003_New")]
+    partial class New
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,15 +54,21 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "39f3e6f0-6fdb-42c6-8d53-3dc4d530ced6",
+                            Id = "e4991818-36f6-4269-911c-e1afe7abcdc2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a1f164a5-4f09-4fce-80cc-5be68f8540f2",
-                            Name = "User",
-                            NormalizedName = "USER"
+                            Id = "8cd98428-eae8-49c9-95e1-68d9387e67ec",
+                            Name = "Employee",
+                            NormalizedName = "Employee"
+                        },
+                        new
+                        {
+                            Id = "5f484dd3-8a08-439e-9211-5cd47c089c8f",
+                            Name = "Executive",
+                            NormalizedName = "Executive"
                         });
                 });
 
@@ -327,6 +333,9 @@ namespace api.Migrations
 
                     b.Property<string>("PostalAddress")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Salary")

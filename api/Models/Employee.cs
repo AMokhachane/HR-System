@@ -29,6 +29,10 @@ public class Employee
 
  public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
+
+        public string? RoleId {get ;set;}
+
+        
 }
 
 

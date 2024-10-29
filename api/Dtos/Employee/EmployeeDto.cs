@@ -25,5 +25,7 @@ namespace api.Dtos.Employee
         public DateTime EndDate { get; set; }
         public string Url { get; set; } // Image URL
         public string PasswordHash { get; set; }
+
+        public string? RoleId { get; set; } // Add nullable RoleId
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAppUserIdToQualifications : Migration
+    public partial class New : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -263,7 +263,8 @@ namespace api.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -360,8 +361,9 @@ namespace api.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "39f3e6f0-6fdb-42c6-8d53-3dc4d530ced6", null, "Admin", "ADMIN" },
-                    { "a1f164a5-4f09-4fce-80cc-5be68f8540f2", null, "User", "USER" }
+                    { "5f484dd3-8a08-439e-9211-5cd47c089c8f", null, "Executive", "Executive" },
+                    { "8cd98428-eae8-49c9-95e1-68d9387e67ec", null, "Employee", "Employee" },
+                    { "e4991818-36f6-4269-911c-e1afe7abcdc2", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

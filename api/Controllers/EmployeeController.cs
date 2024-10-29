@@ -43,7 +43,7 @@ public class EmployeeController : ControllerBase
     }
 
 
-       [HttpPost]
+     [HttpPost]
 public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto employeeDto)
 {
     // Step 1: Create a new AppUser record
@@ -61,15 +61,25 @@ public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto employeeD
         return BadRequest(result.Errors);
     }
 
-    // Step 2: Generate an email confirmation token
+    // Step 2: Assign Role if RoleId is provided
+    if (!string.IsNullOrEmpty(employeeDto.RoleId))
+    {
+        var role = await _context.Roles.FindAsync(employeeDto.RoleId);
+        if (role != null)
+        {
+            await _userManager.AddToRoleAsync(user, role.Name);
+        }
+    }
+
+    // Step 3: Generate an email confirmation token
     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
     var confirmationLink = Url.Action(nameof(ConfirmEmail), "Employee", new { token, email = user.Email }, Request.Scheme);
 
-    // Step 3: Send confirmation email
+    // Step 4: Send confirmation email
     var emailBody = $"Please confirm your account by clicking this link: {confirmationLink}<br/>";
     await _emailSender.SendEmailAsync(user.Email, "Confirm your email and set your password", emailBody);
 
-    // Step 4: Create an employee record and link to the created AppUser
+    // Step 5: Create an employee record and link to the created AppUser
     var employee = new Employee
     {
         Name = employeeDto.Name,
@@ -89,7 +99,8 @@ public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDto employeeD
         EndDate = employeeDto.EndDate,
         Url = employeeDto.Url,
         PasswordHash = employeeDto.PasswordHash,
-        AppUserId = user.Id // Link Employee to AppUser via AppUserId
+        AppUserId = user.Id,
+        RoleId = employeeDto.RoleId // Set RoleId here if provided
     };
 
     // Add the employee to the context
