@@ -176,3 +176,51 @@ html, body {
     margin-top: -10px; /* Adjust margin as needed */
     margin-bottom: 10px; /* Space between error and input */
   }
+
+  .buttonContainer {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    margin-top: 35px;
+  }
+  
+  .submitButton {
+    background-color: #2B4F63; /* Blue color */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 1rem;
+    width: 100px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .nextButton {
+    background-color: #2B4F63; /* Blue color */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 1rem;
+    width: 100px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: 1230px;
+  }
+  
+  .submitButton:hover, .nextButton:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  .titleContainer {
+    position: absolute;
+    top: 0; /* Set desired position */
+    left: 50%; /* Center horizontally if needed */
+    transform: translateX(-50%);
+  }
+  
+  .pageTitle {
+    font-size: 1.5rem;
+	font-weight: bold;
+	color: #4a4a4a;
+	margin-bottom: 20px;
+	text-align: center;
+    margin-left: 400px;
+  }

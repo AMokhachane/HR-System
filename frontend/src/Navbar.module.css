@@ -10,7 +10,7 @@
 	display: flex;           /* Use flexbox for layout */
 	align-items: center;      /* Center items vertically */
 	z-index: 1000;           /* Ensure it sits on top of other content */
-	margin-left: 287px;
+	margin-left: 325px;
   }
   
   .navContent {

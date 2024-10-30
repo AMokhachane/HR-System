@@ -5,12 +5,14 @@ import styles from "./AddEmployee.module.css";
 import Sidebar from "./Sidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const AddEmployee = () => {
   const [imageSelected, setImageSelected] = useState("");
   const [imageUrls, setImageUrls] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessages, setErrorMessages] = useState([]);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
@@ -191,8 +193,12 @@ const AddEmployee = () => {
           <Sidebar />
         </div>
       </div>
+       {/* Freely positioned title container */}
+  <div className={styles.titleContainer}>
+    <h2 className={styles.pageTitle}>Employee Form</h2>
+  </div>
 
-      <div className={styles.box}>
+  <div className={styles.box}>
         <form onSubmit={handleSubmit} className={styles.form}>
           {/* Success message */}
           {successMessage && (
@@ -533,10 +539,14 @@ const AddEmployee = () => {
             />
           </div>
 
-         {/* Submit Button */}
+          <div className={styles.buttonContainer}>
   <button type="submit" className={styles.submitButton} disabled={loading}>
-    {loading ? "Submitting..." : "Submit"}
+    {loading ? "Submitting..." : "Save"}
   </button>
+  <button className={styles.nextButton} onClick={() => navigate('/home')}>
+      Next
+    </button>
+</div>
 </form>
 
         {/* Display uploaded images */}

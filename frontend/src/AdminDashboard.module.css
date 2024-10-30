@@ -164,3 +164,25 @@
     font-weight: bold;
     font-size: 16px;
 }
+
+/* Ensure dropdown items are displayed in a vertical column */
+.dropdown-menu {
+    display: block; /* Ensure the menu items are displayed as block elements */
+}
+
+.Item {
+    padding: 10px 15px; /* Padding for dropdown items */
+    color: #f4f6f8; /* Default text color */
+    background-color: #6c757d;
+    display: block; /* Ensure items are displayed as block elements */
+    border-bottom: 1px solid #e9ecef; /* Optional: Add a bottom border for visual separation */
+}
+
+.Item:last-child {
+    border-bottom: none; /* Remove bottom border for the last item */
+}
+
+.Item:hover {
+    background-color: #989ca0; /* Light background on hover */
+    color: #000; /* Darker text color on hover */
+}
