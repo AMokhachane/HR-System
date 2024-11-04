@@ -5,6 +5,7 @@ import EmployeeDetailsCSS from "./EmployeeDetails.module.css";
 import Sidebar from "./Sidebar";
 import BankingDetail from "./BankingDetail";
 import Qualifications from "./Qualifications";
+import JobTitle from "./JobTitle";
 
 const EmployeeDetails = () => {
   const { id } = useParams();
@@ -18,12 +19,17 @@ const EmployeeDetails = () => {
     const fetchEmployeeDetails = async () => {
       try {
         console.log(`Fetching employee details for ID: ${id}`);
-        const response = await axios.get(`http://localhost:5239/api/employee/${id}`);
+        const response = await axios.get(
+          `http://localhost:5239/api/employee/${id}`
+        );
         console.log("Response:", response.data);
         setEmployee(response.data);
       } catch (err) {
         console.error(err);
-        setError(err.response?.data?.message || "An error occurred while fetching employee details.");
+        setError(
+          err.response?.data?.message ||
+            "An error occurred while fetching employee details."
+        );
       } finally {
         setLoading(false);
       }
@@ -66,6 +72,17 @@ const EmployeeDetails = () => {
   // Render nothing or a message if the employee data is not set
   if (!employee) return null;
 
+  const handleJobTitleSuccess = (data) => {
+    console.log("Qualifications saved successfully:", data);
+    setActiveTab("qualifications");
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className={EmployeeDetailsCSS.error}>{error}</div>;
+
+  // Render nothing or a message if the employee data is not set
+  if (!employee) return null;
+
   return (
     <div className={EmployeeDetailsCSS.container}>
       <div className={EmployeeDetailsCSS.leftSide}>
@@ -96,9 +113,15 @@ const EmployeeDetails = () => {
 
           {/* Tabs */}
           <div className={EmployeeDetailsCSS.tabs}>
-            <button onClick={() => setActiveTab("profile")}>Profile Info</button>
-            <button onClick={() => setActiveTab("banking")}>Banking Details</button>
-            <button onClick={() => setActiveTab("qualifications")}>Qualifications</button>
+            <button onClick={() => setActiveTab("profile")}>
+              Profile Info
+            </button>
+            <button onClick={() => setActiveTab("banking")}>
+              Banking Details
+            </button>
+            <button onClick={() => setActiveTab("qualifications")}>
+              Qualifications
+            </button>
             <button onClick={() => setActiveTab("jobTitle")}>Job Title</button>
             <button onClick={() => setActiveTab("reports")}>Reports</button>
           </div>
@@ -117,6 +140,13 @@ const EmployeeDetails = () => {
               onSuccess={handleQualificationsSuccess}
             />
           )}
+          {activeTab === "jobTitle" && (
+            <JobTitle
+              appUserId={employee.appUserId}
+              onSuccess={handleJobTitleSuccess}
+            />
+          )}
+
           {activeTab === "profile" && (
             <>
               {/* Basic Details */}
@@ -124,15 +154,21 @@ const EmployeeDetails = () => {
                 <h3>Basic Details</h3>
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Date of Birth:</strong></p>
+                    <p>
+                      <strong>Date of Birth:</strong>
+                    </p>
                     <input
-                      value={new Date(employee.dateOfBirth).toLocaleDateString()}
+                      value={new Date(
+                        employee.dateOfBirth
+                      ).toLocaleDateString()}
                       className={EmployeeDetailsCSS.inputField}
                       readOnly
                     />
                   </div>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Gender:</strong></p>
+                    <p>
+                      <strong>Gender:</strong>
+                    </p>
                     <input
                       value={employee.gender}
                       className={EmployeeDetailsCSS.inputField}
@@ -142,7 +178,9 @@ const EmployeeDetails = () => {
                 </div>
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Marital Status:</strong></p>
+                    <p>
+                      <strong>Marital Status:</strong>
+                    </p>
                     <input
                       value={employee.maritalStatus}
                       className={EmployeeDetailsCSS.inputField}
@@ -150,7 +188,9 @@ const EmployeeDetails = () => {
                     />
                   </div>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Email:</strong></p>
+                    <p>
+                      <strong>Email:</strong>
+                    </p>
                     <input
                       value={employee.email}
                       className={EmployeeDetailsCSS.inputField}
@@ -160,7 +200,9 @@ const EmployeeDetails = () => {
                 </div>
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Identity Number:</strong></p>
+                    <p>
+                      <strong>Identity Number:</strong>
+                    </p>
                     <input
                       value={employee.identityNumber}
                       className={EmployeeDetailsCSS.inputField}
@@ -175,7 +217,9 @@ const EmployeeDetails = () => {
                 <h3>Employment Details</h3>
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Contract Type:</strong></p>
+                    <p>
+                      <strong>Contract Type:</strong>
+                    </p>
                     <input
                       value={employee.contractType}
                       className={EmployeeDetailsCSS.inputField}
@@ -183,7 +227,9 @@ const EmployeeDetails = () => {
                     />
                   </div>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Start Date:</strong></p>
+                    <p>
+                      <strong>Start Date:</strong>
+                    </p>
                     <input
                       value={employee.startDate}
                       className={EmployeeDetailsCSS.inputField}
@@ -193,7 +239,9 @@ const EmployeeDetails = () => {
                 </div>
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>End Date:</strong></p>
+                    <p>
+                      <strong>End Date:</strong>
+                    </p>
                     <input
                       value={employee.endDate}
                       className={EmployeeDetailsCSS.inputField}
@@ -201,7 +249,9 @@ const EmployeeDetails = () => {
                     />
                   </div>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Tax Number:</strong></p>
+                    <p>
+                      <strong>Tax Number:</strong>
+                    </p>
                     <input
                       value={employee.taxNumber}
                       className={EmployeeDetailsCSS.inputField}
@@ -211,7 +261,9 @@ const EmployeeDetails = () => {
                 </div>
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Salary:</strong></p>
+                    <p>
+                      <strong>Salary:</strong>
+                    </p>
                     <input
                       value={employee.salary}
                       className={EmployeeDetailsCSS.inputField}
@@ -219,7 +271,9 @@ const EmployeeDetails = () => {
                     />
                   </div>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Physical Address:</strong></p>
+                    <p>
+                      <strong>Physical Address:</strong>
+                    </p>
                     <input
                       value={employee.physicalAddress}
                       className={EmployeeDetailsCSS.inputField}
@@ -229,7 +283,9 @@ const EmployeeDetails = () => {
                 </div>
                 <div className={EmployeeDetailsCSS.row}>
                   <div className={EmployeeDetailsCSS.inputGroup}>
-                    <p><strong>Postal Address:</strong></p>
+                    <p>
+                      <strong>Postal Address:</strong>
+                    </p>
                     <input
                       value={employee.postalAddress}
                       className={EmployeeDetailsCSS.inputField}

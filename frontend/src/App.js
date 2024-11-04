@@ -11,7 +11,8 @@ import EmployeeDetails from './EmployeeDetails'; // Import the new EmployeeDetai
 import BankingDetail from './BankingDetail';
 import Qualifications from "./Qualifications";
 import AdminDashboard from "./AdminDashboard";
-import Performance from "./Performance"
+import Performance from "./Performance";
+import JobTitle from './JobTitle';
 
 
 
@@ -43,6 +44,7 @@ function App() {
         <Route path="/qualifications" element={<Qualifications />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/performance" element={<Performance />} />
+        <Route path="/job-title" element={<JobTitle />} />
         
       </Routes>
     </Router>
